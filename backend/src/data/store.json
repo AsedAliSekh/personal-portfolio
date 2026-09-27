@@ -1,0 +1,833 @@
+{
+  "users": [
+    {
+      "_id": "admin_primary",
+      "name": "Ased",
+      "email": "admin@portfolio.dev",
+      "password": "$2b$10$liUHbfG8KG7jQesoP15lle8drHxMG2bZ3ASZUC/PALANxG0aZ2Jxm",
+      "role": "admin",
+      "createdAt": "2026-09-25T17:01:44.168Z",
+      "updatedAt": "2026-09-25T17:01:44.168Z"
+    }
+  ],
+  "profile": {
+    "_id": "6ab77e9c763e85a3ab424c73",
+    "name": "Ased Ali Sekh",
+    "initials": "AS",
+    "title": "Full Stack Developer",
+    "titles": [
+      "Full Stack Developer",
+      "Cyber Security"
+    ],
+    "bio": "Passionate computer science professional building scalable cloud architectures, intelligent machine learning systems, and resilient cybersecurity solutions with modern aesthetics.",
+    "shortBio": "I build scalable web applications, intelligent systems and secure digital experiences.",
+    "philosophy": "Code should be clean, resilient, and visually captivating. Engineering is the bridge between human curiosity and tangible societal impact.",
+    "location": "Kolkata, India ",
+    "email": "asedalisekh.dev@gmail.com",
+    "availabilityStatus": "available",
+    "statusText": "Available for high-impact opportunities",
+    "avatarUrl": "http://localhost:5173/uploads/file-1790362085597-589784938.png",
+    "resumeUrl": "uploads/file-1790410806180-127735213.pdf",
+    "yearsOfExperience": 1,
+    "stats": [
+      {
+        "label": "Completed Projects",
+        "value": "20+",
+        "order": 1,
+        "_id": "6ab77e9c763e85a3ab424c74"
+      },
+      {
+        "label": "Years Experience",
+        "value": "3+",
+        "order": 2,
+        "_id": "6ab77e9c763e85a3ab424c75"
+      },
+      {
+        "label": "Open Source Repos",
+        "value": "30+",
+        "order": 3,
+        "_id": "6ab77e9c763e85a3ab424c76"
+      },
+      {
+        "label": "Security Audits",
+        "value": "15+",
+        "order": 4,
+        "_id": "6ab77e9c763e85a3ab424c77"
+      }
+    ],
+    "socialLinks": [
+      {
+        "platform": "GitHub",
+        "url": "https://github.com",
+        "icon": "Github",
+        "_id": "6ab77e9c763e85a3ab424c78"
+      },
+      {
+        "platform": "LinkedIn",
+        "url": "https://linkedin.com",
+        "icon": "Linkedin",
+        "_id": "6ab77e9c763e85a3ab424c79"
+      },
+      {
+        "platform": "Twitter / X",
+        "url": "https://x.com",
+        "icon": "Twitter",
+        "_id": "6ab77e9c763e85a3ab424c7a"
+      },
+      {
+        "platform": "Email",
+        "url": "mailto:ased@portfolio.dev",
+        "icon": "Mail",
+        "_id": "6ab77e9c763e85a3ab424c7b"
+      }
+    ],
+    "terminalWhoami": "ased@mainframe:~$ Software Engineer & Cyber Researcher [Clearance: Level 5]",
+    "updatedAt": "2026-09-26T09:36:31.077Z",
+    "createdAt": "2026-09-26T08:13:16.886Z",
+    "__v": 0
+  },
+  "skills": [
+    {
+      "name": "React 19 & Next.js",
+      "category": "frontend",
+      "proficiency": 96,
+      "years": 3,
+      "description": "Component architecture, SSR/SSG, Server Actions, Hooks",
+      "icon": "Atom",
+      "order": 1,
+      "featured": true,
+      "orbitRadius": 3.5,
+      "speed": 1.2,
+      "_id": "id_1790355704171_l45hv"
+    },
+    {
+      "name": "TypeScript",
+      "category": "programming",
+      "proficiency": 94,
+      "years": 3,
+      "description": "Strict typing, generics, ASTs, modular type systems",
+      "icon": "FileCode2",
+      "order": 2,
+      "featured": true,
+      "orbitRadius": 4.2,
+      "speed": 0.9,
+      "_id": "id_1790355704173_ghi7s"
+    },
+    {
+      "name": "Tailwind CSS",
+      "category": "frontend",
+      "proficiency": 95,
+      "years": 3,
+      "description": "Design systems, responsive layout, animations, arbitrary values",
+      "icon": "Palette",
+      "order": 3,
+      "featured": true,
+      "orbitRadius": 4.8,
+      "speed": 1.1,
+      "_id": "id_1790355704174_etfw1"
+    },
+    {
+      "name": "Three.js & WebGL",
+      "category": "frontend",
+      "proficiency": 88,
+      "years": 2,
+      "description": "Shaders, 3D math, canvas rendering, particles, lighting",
+      "icon": "Box",
+      "order": 4,
+      "featured": true,
+      "orbitRadius": 5.5,
+      "speed": 0.8,
+      "_id": "id_1790355704175_246ul"
+    },
+    {
+      "name": "Node.js & Express",
+      "category": "backend",
+      "proficiency": 92,
+      "years": 3,
+      "description": "High-throughput REST APIs, middleware, streams, async loops",
+      "icon": "Server",
+      "order": 5,
+      "featured": true,
+      "orbitRadius": 3.8,
+      "speed": 1.3,
+      "_id": "id_1790355704176_knnpt"
+    },
+    {
+      "name": "Python",
+      "category": "programming",
+      "proficiency": 90,
+      "years": 3,
+      "description": "FastAPI, PyTorch, NumPy, Pandas, automation scripts",
+      "icon": "Binary",
+      "order": 6,
+      "featured": true,
+      "orbitRadius": 4.5,
+      "speed": 0.7,
+      "_id": "id_1790355704177_keuxz"
+    },
+    {
+      "name": "MongoDB",
+      "category": "database",
+      "proficiency": 88,
+      "years": 3,
+      "description": "Document stores, aggregation pipelines, Mongoose schemas",
+      "icon": "Layers",
+      "order": 9,
+      "featured": true,
+      "orbitRadius": 4.4,
+      "speed": 0.85,
+      "_id": "id_1790355704183_zq41w"
+    },
+    {
+      "name": "PyTorch & ML",
+      "category": "ai_ml",
+      "proficiency": 86,
+      "years": 2,
+      "description": "Deep neural networks, computer vision, transfer learning",
+      "icon": "BrainCircuit",
+      "order": 11,
+      "featured": true,
+      "orbitRadius": 4,
+      "speed": 0.95,
+      "_id": "id_1790355704189_3t2fm"
+    },
+    {
+      "name": "Network Security & Wireshark",
+      "category": "cyber_security",
+      "proficiency": 87,
+      "years": 2,
+      "description": "Packet sniffing, protocol analysis, firewall architectures",
+      "icon": "ShieldCheck",
+      "order": 13,
+      "featured": true,
+      "orbitRadius": 4.1,
+      "speed": 0.9,
+      "_id": "id_1790355704192_v33nd"
+    },
+    {
+      "name": "OWASP & Pen-Testing",
+      "category": "cyber_security",
+      "proficiency": 85,
+      "years": 2,
+      "description": "Vulnerability assessment, XSS/SQLi mitigation, Burp Suite",
+      "icon": "Lock",
+      "order": 14,
+      "featured": true,
+      "orbitRadius": 5.1,
+      "speed": 1.2,
+      "_id": "id_1790355704193_sn22t"
+    },
+    {
+      "name": "Docker & Containers",
+      "category": "devops",
+      "proficiency": 88,
+      "years": 2,
+      "description": "Multi-stage builds, container isolation, compose orchestration",
+      "icon": "Container",
+      "order": 15,
+      "featured": true,
+      "orbitRadius": 4.6,
+      "speed": 0.8,
+      "_id": "id_1790355704194_2cpzn"
+    },
+    {
+      "name": "Linux Mainframe & Bash",
+      "category": "tools",
+      "proficiency": 92,
+      "years": 3,
+      "description": "Kernel parameters, shell scripting, systemd, SSH hardening",
+      "icon": "Terminal",
+      "order": 16,
+      "featured": true,
+      "orbitRadius": 3.9,
+      "speed": 1.25,
+      "_id": "id_1790355704195_u6bn4"
+    }
+  ],
+  "experience": [
+    {
+      "company": "CyberPulse Labs",
+      "position": "Systems & Security Engineering Intern",
+      "employmentType": "Internship",
+      "location": "Remote",
+      "startDate": "2023-05",
+      "endDate": "2023-12",
+      "isCurrent": false,
+      "description": "Conducted automated vulnerability assessments and developed security telemetry pipelines.",
+      "responsibilities": [
+        "Implemented Wireshark automation scripts for continuous network protocol auditing.",
+        "Built full-stack internal vulnerability triage dashboard using Express and React.",
+        "Collaborated on pen-testing campaigns identifying OWASP Top 10 vulnerabilities in staging builds."
+      ],
+      "achievements": [
+        "Patched 14 critical CVE vulnerabilities prior to annual ISO 27001 audit.",
+        "Reduced manual triage turnaround time from 4 hours to 15 minutes."
+      ],
+      "technologies": [
+        "Python",
+        "Linux",
+        "Wireshark",
+        "Bash",
+        "React",
+        "MongoDB"
+      ],
+      "order": 2,
+      "_id": "id_1790355704206_ourc2"
+    },
+    {
+      "company": "DevForge Studios",
+      "position": "Frontend Developer Intern",
+      "employmentType": "Internship",
+      "location": "Bengaluru, India",
+      "startDate": "2022-08",
+      "endDate": "2023-04",
+      "isCurrent": false,
+      "description": "Built high-converting interactive web interfaces and real-time client analytics portals.",
+      "responsibilities": [
+        "Developed reusable responsive component libraries with accessible keyboard navigation.",
+        "Implemented Three.js 3D landing page animations increasing user engagement duration by 35%."
+      ],
+      "achievements": [
+        "Shipped 8 commercial client web platforms on schedule with 100% test coverage for critical user flows."
+      ],
+      "technologies": [
+        "React",
+        "TypeScript",
+        "Three.js",
+        "Tailwind CSS",
+        "Git"
+      ],
+      "order": 3,
+      "_id": "id_1790355704207_3esve"
+    },
+    {
+      "company": "Cyber Secured India",
+      "position": "Cyber Security and Digital Forensics Intern",
+      "employmentType": "Internship",
+      "location": "Remote",
+      "startDate": "2023-8",
+      "endDate": "2023-11",
+      "isCurrent": true,
+      "description": "",
+      "responsibilities": [
+        "Architected scalable microservices",
+        "Engineered resilient security controls"
+      ],
+      "achievements": [
+        "Delivered zero-downtime deployment"
+      ],
+      "technologies": [
+        "Web Application Penetration",
+        "Burp Suite",
+        "Nmap"
+      ],
+      "logoUrl": "",
+      "order": 0,
+      "_id": "6ab7836c119447e29a03e125",
+      "createdAt": "2026-09-26T08:33:48.905Z",
+      "updatedAt": "2026-09-26T08:33:48.905Z",
+      "__v": 0
+    }
+  ],
+  "education": [
+    {
+      "degree": "BCA",
+      "institution": "Institute of Engineering & Technology",
+      "location": "India",
+      "startYear": "2020",
+      "endYear": "2024",
+      "grade": "8.8 / 10 CGPA (Honors)",
+      "description": "Specialized in Distributed Systems, Computer Networks, and Artificial Intelligence. Led collegiate cybersecurity CTF team and technical symposiums.",
+      "coursework": [
+        "Data Structures & Algorithms",
+        "Operating Systems & Kernel Design",
+        "Cryptography & Network Security",
+        "Distributed Cloud Computing",
+        "Machine Learning & Neural Networks",
+        "Database Management Systems"
+      ],
+      "order": 1,
+      "_id": "id_1790355704209_1yrjy"
+    }
+  ],
+  "certifications": [
+    {
+      "title": "CompTIA Security+ (SY0-701)",
+      "issuer": "CompTIA",
+      "issueDate": "2024-05",
+      "expirationDate": "2027-05",
+      "credentialId": "COMP0010203040",
+      "credentialUrl": "https://comptia.org/verify/COMP0010203040",
+      "certificateImageUrl": "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=600&auto=format&fit=crop&q=80",
+      "description": "Demonstrates baseline mastery in network security, threat mitigation, cryptography, and risk assessment.",
+      "order": 1,
+      "_id": "id_1790355704211_zq8w4"
+    }
+  ],
+  "projects": [
+    {
+      "title": "FasalBandhu",
+      "slug": "fasalbandhu",
+      "shortDescription": "AI-powered precision agriculture platform offering real-time crop disease diagnosis and soil yield forecasts.",
+      "detailedDescription": "FasalBandhu democratizes cutting-edge agricultural intelligence for smallholder farmers. By running localized computer vision models on mobile devices, farmers can instantly diagnose leaf blight, pest infestations, and micronutrient deficiencies without requiring active 5G connectivity.",
+      "category": "AI / ML & Full Stack",
+      "thumbnail": "https://images.unsplash.com/photo-1592982537447-7440770cbfc9?w=800&auto=format&fit=crop&q=80",
+      "gallery": [
+        "https://images.unsplash.com/photo-1592982537447-7440770cbfc9?w=800&auto=format&fit=crop&q=80",
+        "https://images.unsplash.com/photo-1586771107445-d3ca888129ff?w=800&auto=format&fit=crop&q=80"
+      ],
+      "technologies": [
+        "React 19",
+        "TypeScript",
+        "Node.js",
+        "Express",
+        "TensorFlow.js",
+        "MongoDB",
+        "Tailwind CSS"
+      ],
+      "githubUrl": "https://github.com/example/fasalbandhu",
+      "liveUrl": "https://fasalbandhu.dev",
+      "isFeatured": true,
+      "completionDate": "2025-08-20",
+      "clientType": "Agritech Social Initiative",
+      "challenges": "Intermittent field connectivity and wide variance in mobile camera resolutions in varying outdoor lighting.",
+      "solution": "Integrated client-side TensorFlow.js inference with adaptive image normalization and local IndexedDB offline sync.",
+      "results": "Over 14,000 diagnostic scans executed with 96.2% validation accuracy against agricultural laboratory standards.",
+      "architectureDiagram": "Mobile Camera -> TF.js WebAssembly -> Offline Diagnosis -> Background Sync -> Express API -> Mongo Cluster",
+      "statistics": [
+        {
+          "label": "Scans Done",
+          "value": "14,000+"
+        },
+        {
+          "label": "Model Accuracy",
+          "value": "96.2%"
+        },
+        {
+          "label": "Offline Support",
+          "value": "100%"
+        },
+        {
+          "label": "Active Farmers",
+          "value": "3,200+"
+        }
+      ],
+      "order": 2,
+      "published": true,
+      "views": 2454,
+      "createdAt": "2026-09-25T17:01:44.197Z",
+      "updatedAt": "2026-09-25T17:01:44.197Z",
+      "_id": "id_1790355704199_rrueu"
+    }
+  ],
+  "research": [
+    {
+      "title": "Adversarial Robustness in Quantized Deep Neural Networks",
+      "abstract": "Investigates vulnerability thresholds of INT8 and INT4 quantized neural networks against projected gradient descent (PGD) attacks compared to full-precision FP32 baselines in resource-constrained IoT security edge devices.",
+      "researchQuestion": "Does post-training quantization amplify sensitivity to adversarial perturbation in edge-deployed vision classifiers?",
+      "methodology": "Evaluated ResNet-50 and MobileNetV3 models trained on ImageNet against adversarial epsilon perturbations across diverse quantization schemes.",
+      "dataset": "ImageNet-1k & CIFAR-100",
+      "model": "PyTorch Quantized ResNet-50 & MobileNetV3",
+      "results": "Discovered that selective activation clipping preserves 92.4% adversarial robustness while yielding 3.8x inference speedups on edge processors.",
+      "publicationStatus": "Peer-Reviewed Conference Paper",
+      "paperUrl": "https://arxiv.org/abs/2401.sample",
+      "githubUrl": "https://github.com/example/quantized-adversarial-research",
+      "metrics": [
+        {
+          "label": "Inference Speedup",
+          "value": "3.8x"
+        },
+        {
+          "label": "Robustness Retained",
+          "value": "92.4%"
+        },
+        {
+          "label": "Model Size Reduction",
+          "value": "74%"
+        }
+      ],
+      "order": 1,
+      "published": true,
+      "createdAt": "2026-09-25T17:01:44.216Z",
+      "_id": "id_1790355704216_wz541"
+    },
+    {
+      "title": "Zero-Knowledge Proofs for Privacy-Preserving Web Authentication",
+      "abstract": "A formal analysis and implementation framework for zk-SNARK based decentralized authentication schemas eliminating centralized password hash databases.",
+      "researchQuestion": "Can client-side zk-SNARK generation achieve acceptable latencies on mobile browser JavaScript engines?",
+      "methodology": "Constructed custom Circom arithmetic circuits and verified proof generation benchmarks via WebAssembly inside React.",
+      "dataset": "Synthetic authentication benchmark suite (100,000 runs)",
+      "model": "Groth16 Proof Protocol via Circom & SnarkJS",
+      "results": "Achieved sub-400ms proof generation on consumer devices with zero credential leakage over insecure networks.",
+      "publicationStatus": "Open Research Technical Report",
+      "paperUrl": "https://eprint.iacr.org/sample",
+      "githubUrl": "https://github.com/example/zk-web-auth",
+      "metrics": [
+        {
+          "label": "Client Proof Time",
+          "value": "380ms"
+        },
+        {
+          "label": "Verification Time",
+          "value": "4ms"
+        },
+        {
+          "label": "Credential Leakage",
+          "value": "0 bytes"
+        }
+      ],
+      "order": 2,
+      "published": true,
+      "createdAt": "2026-09-25T17:01:44.216Z",
+      "_id": "id_1790355704218_nhwyk"
+    }
+  ],
+  "achievements": [
+    {
+      "title": "1st Place Winner - National Cyber Hackathon 2024",
+      "organization": "TechSprint Innovation Summit",
+      "date": "2024-03",
+      "description": "Built an automated memory-forensics and ransomware detection tool in 36 hours competing against 240+ university teams.",
+      "category": "Hackathon",
+      "url": "https://hackathon.sample.org/winners-2024",
+      "order": 1,
+      "_id": "id_1790355704227_n71hm"
+    },
+    {
+      "title": "Top 10 Finalist - CyberDefenders CTF",
+      "organization": "CyberDefenders Guild",
+      "date": "2023-10",
+      "description": "Solved complex binary exploitation, reverse engineering, and web vulnerability challenges in a 48-hour global Capture The Flag contest.",
+      "category": "Competition",
+      "order": 2,
+      "_id": "id_1790355704228_8053i"
+    },
+    {
+      "title": "Open Source Community Core Contributor",
+      "organization": "Open Source Initiative",
+      "date": "2023-01",
+      "description": "Merged 25+ pull requests improving developer tooling, TypeScript typings, and documentation across popular GitHub projects.",
+      "category": "Open Source",
+      "order": 3,
+      "_id": "id_1790355704230_9pdcu"
+    }
+  ],
+  "services": [
+    {
+      "title": "Full Stack Web Architecture",
+      "description": "Engineering robust, scalable, modern web platforms using React 19, TypeScript, and microservice cloud backends with peak performance.",
+      "icon": "Layers",
+      "features": [
+        "Modern React & Next.js",
+        "REST & GraphQL APIs",
+        "Database Optimization",
+        "High-Speed CI/CD"
+      ],
+      "enabled": true,
+      "order": 1,
+      "_id": "id_1790355704233_fvy8u"
+    },
+    {
+      "title": "AI / Machine Learning Engineering",
+      "description": "Developing end-to-end intelligent pipelines from computer vision models to retrieval-augmented generation (RAG) and local LLM integration.",
+      "icon": "Brain",
+      "features": [
+        "Custom PyTorch Models",
+        "RAG & Vector Search",
+        "TensorFlow.js Edge AI",
+        "Quantized Model Deployment"
+      ],
+      "enabled": true,
+      "order": 2,
+      "_id": "id_1790355704234_t5y7x"
+    },
+    {
+      "title": "Cybersecurity & Vulnerability Auditing",
+      "description": "Comprehensive security posture analysis, code reviews, penetration testing simulations, and zero-trust authentication implementations.",
+      "icon": "Shield",
+      "features": [
+        "OWASP Top 10 Audits",
+        "Zero-Trust Auth Design",
+        "Network Packet Analysis",
+        "Security Best Practices"
+      ],
+      "enabled": true,
+      "order": 3,
+      "_id": "id_1790355704236_7r3to"
+    },
+    {
+      "title": "Interactive 3D Web & Creative Experiences",
+      "description": "Creating memorable, cinematic 3D digital experiences using Three.js, custom GLSL shaders, and silky smooth WebGL rendering.",
+      "icon": "Sparkles",
+      "features": [
+        "Three.js & R3F",
+        "GLSL Custom Shaders",
+        "60 FPS Performance",
+        "Interactive Simulations"
+      ],
+      "enabled": true,
+      "order": 4,
+      "_id": "id_1790355704238_560hh"
+    }
+  ],
+  "testimonials": [
+    {
+      "name": "Dr. Evelyn Vance",
+      "role": "Research Director",
+      "company": "NeuralTech Labs",
+      "content": "Ased possesses a rare combination of deep theoretical computer science acumen and practical implementation speed. His work on quantized model robustness was exemplary.",
+      "rating": 5,
+      "published": true,
+      "linkedinUrl": "https://linkedin.com",
+      "order": 1,
+      "_id": "id_1790355704240_o07k6"
+    },
+    {
+      "name": "Marcus Sterling",
+      "role": "Head of Engineering",
+      "company": "Aether Cloud Systems",
+      "content": "Ased consistently raises the engineering bar. From zero-trust authentication to high-performance micro-frontends, he delivers production-grade code that is both beautiful and bulletproof.",
+      "rating": 5,
+      "published": true,
+      "linkedinUrl": "https://linkedin.com",
+      "order": 2,
+      "_id": "id_1790355704241_sdjzh"
+    }
+  ],
+  "blogPosts": [
+    {
+      "title": "Architecting Zero-Trust Authentication in Modern Web Distributed Systems",
+      "slug": "architecting-zero-trust-authentication",
+      "excerpt": "How to transition beyond legacy session cookies to cryptographically verifiable, ephemeral JWTs with automated public key rotation and zero-trust principles.",
+      "content": "## The Demise of Perimeter Security\n\nIn traditional web architectures, systems relied on a simple assumption: once a request passed through the perimeter firewall, it could be trusted. Microservices inside the private network communicated with little to no internal authentication.\n\nModern threats have rendered the \"castle-and-moat\" paradigm obsolete. \n\n### Core Zero-Trust Tenets\n\n1. **Verify explicitly**: Always authenticate and authorize based on all available data points (identity, location, device health, service context).\n2. **Use least privilege access**: Limit user and service access with Just-In-Time (JIT) and Just-Enough-Access (JEA).\n3. **Assume breach**: Minimize blast radius by segmenting access, encrypting all end-to-end communication, and verifying continuously.\n\n```typescript\n// Example: Asymmetric RS256 token verification middleware\nimport jwt from 'jsonwebtoken';\nimport { Request, Response, NextFunction } from 'express';\n\nexport const verifyZeroTrustToken = (req: Request, res: Response, next: NextFunction) => {\n  const authHeader = req.headers.authorization;\n  if (!authHeader?.startsWith('Bearer ')) {\n    return res.status(401).json({ error: 'Security Context Missing' });\n  }\n\n  const token = authHeader.split(' ')[1];\n  try {\n    const decoded = jwt.verify(token, process.env.PUBLIC_KEY!, {\n      algorithms: ['RS256'],\n      issuer: 'auth.enterprise.mesh',\n      audience: 'api.portfolio.internal'\n    });\n    req.user = decoded;\n    next();\n  } catch (err) {\n    return res.status(403).json({ error: 'Cryptographic Verification Failed' });\n  }\n};\n```\n\n### Ephemeral Tokens & Token Rotation\n\nBy issuing access tokens with a strict 15-minute lifespan and implementing automated refresh token rotation with family detection, any stolen token is automatically neutralized upon next renewal.",
+      "coverImage": "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800&auto=format&fit=crop&q=80",
+      "author": "Ased",
+      "category": "Cyber Security",
+      "tags": [
+        "Zero Trust",
+        "Security",
+        "JWT",
+        "Architecture",
+        "TypeScript"
+      ],
+      "readTimeMinutes": 6,
+      "publishDate": "2025-10-18",
+      "isPublished": true,
+      "isFeatured": true,
+      "seoTitle": "Zero-Trust Authentication in Distributed Systems | Ased",
+      "seoDescription": "Guide to building cryptographically resilient zero-trust auth architectures in Node.js and TypeScript.",
+      "views": 1251,
+      "createdAt": "2026-09-25T17:01:44.219Z",
+      "updatedAt": "2026-09-25T17:01:44.219Z",
+      "_id": "id_1790355704219_sl6rw",
+      "order": 0
+    },
+    {
+      "title": "Real-Time 3D Rendering on the Web: High-Performance Three.js & Shader Optimization",
+      "slug": "real-time-3d-rendering-threejs-shaders",
+      "excerpt": "Techniques for maintaining 60 FPS in WebGL hero scenes: geometry instancing, custom GLSL fragment shaders, and GPU memory management.",
+      "content": "## Why Most 3D Web Experiences Suffer from Stutter\n\nAdding Three.js to a portfolio or marketing page is visually transformative, but poorly optimized scenes lead to frame drops, battery drain, and terrible Core Web Vitals (especially INP and LCP).\n\n### 1. Batching Draw Calls with InstancedMesh\n\nInstead of rendering 1,000 separate mesh instances—which results in 1,000 CPU-to-GPU draw calls—use `InstancedMesh`:\n\n```javascript\nconst geometry = new THREE.SphereGeometry(0.1, 16, 16);\nconst material = new THREE.MeshStandardMaterial({ color: 0x22D3EE });\nconst instancedMesh = new THREE.InstancedMesh(geometry, material, 1000);\n\nconst dummy = new THREE.Object3D();\nfor (let i = 0; i < 1000; i++) {\n  dummy.position.set(\n    (Math.random() - 0.5) * 20,\n    (Math.random() - 0.5) * 20,\n    (Math.random() - 0.5) * 20\n  );\n  dummy.updateMatrix();\n  instancedMesh.setMatrixAt(i, dummy.matrix);\n}\nscene.add(instancedMesh);\n```\n\n### 2. Device Pixel Ratio (DPR) Clamping\n\nNever blindly set `renderer.setPixelRatio(window.devicePixelRatio)`. On a 3x Retina display, this renders 9x more pixels:\n\n```javascript\nrenderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.75));\n```\n\nClamping to 1.75 or 2.0 maintains pristine visual fidelity while preventing thermal throttling.",
+      "coverImage": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&auto=format&fit=crop&q=80",
+      "author": "Ased",
+      "category": "Web Graphics",
+      "tags": [
+        "Three.js",
+        "WebGL",
+        "Shaders",
+        "Performance",
+        "React"
+      ],
+      "readTimeMinutes": 5,
+      "publishDate": "2025-09-04",
+      "isPublished": true,
+      "isFeatured": true,
+      "seoTitle": "Optimizing Three.js for 60 FPS on Modern Browsers",
+      "seoDescription": "Master WebGL performance with instanced meshes, custom shaders, and DPR clamping.",
+      "views": 982,
+      "createdAt": "2026-09-25T17:01:44.219Z",
+      "updatedAt": "2026-09-25T17:01:44.219Z",
+      "_id": "id_1790355704221_pjbkr",
+      "order": 1
+    },
+    {
+      "title": "Building Intelligent Systems with Local LLMs and Vector Search (RAG)",
+      "slug": "building-intelligent-systems-local-llms-rag",
+      "excerpt": "How to construct completely private, zero-leakage enterprise knowledge assistants using Ollama, LangChain, and embedding databases.",
+      "content": "## Data Privacy in the Era of Generative AI\n\nWhile commercial cloud APIs offer immense intelligence, feeding confidential intellectual property into external third-party servers presents significant compliance risks.\n\n### The Self-Hosted Solution\n\nBy combining quantized open-source weights (such as Llama 3 or Mistral) running on local hardware with a vector store, we can query enterprise documentation entirely on-premise.\n\n### Step-by-Step RAG Pipeline\n\n1. **Chunking**: Break documents into semantic segments (e.g. 500 tokens with 50-token overlap).\n2. **Embedding**: Pass chunks into an embedding model to produce high-dimensional vectors.\n3. **Retrieval**: Compute cosine similarity between user question vector and stored vectors.\n4. **Augmented Prompt**: Supply top-k relevant chunks as context to the local LLM.",
+      "coverImage": "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=800&auto=format&fit=crop&q=80",
+      "author": "Ased",
+      "category": "Artificial Intelligence",
+      "tags": [
+        "AI",
+        "LLM",
+        "RAG",
+        "Vector Search",
+        "Python"
+      ],
+      "readTimeMinutes": 7,
+      "publishDate": "2025-07-22",
+      "isPublished": true,
+      "isFeatured": false,
+      "seoTitle": "Self-Hosted RAG with Local LLMs | Ased",
+      "seoDescription": "Step-by-step guide to private retrieval-augmented generation using vector databases.",
+      "views": 1423,
+      "createdAt": "2026-09-25T17:01:44.219Z",
+      "updatedAt": "2026-09-25T17:01:44.219Z",
+      "_id": "id_1790355704225_8oum5",
+      "order": 2
+    }
+  ],
+  "messages": [
+    {
+      "_id": "msg_1790360029093",
+      "name": "Ada Lovelace",
+      "email": "ada@example.com",
+      "subject": "Quantum Architecture Inquiry",
+      "message": "I love the futuristic design and 3D experiences on this portfolio!",
+      "projectType": "General Consultation",
+      "budget": "",
+      "timeline": "",
+      "isRead": false,
+      "isArchived": false,
+      "createdAt": "2026-09-25T18:13:49.094Z",
+      "order": 0
+    },
+    {
+      "_id": "msg_1790360838752",
+      "name": "Ased Ali Sekh",
+      "email": "ased2020ali@gmail.com",
+      "subject": "jlb",
+      "message": "khvkj",
+      "projectType": "Full Stack Development",
+      "budget": "Full-Time Compensation",
+      "timeline": "1-3 Months",
+      "isRead": false,
+      "isArchived": false,
+      "createdAt": "2026-09-25T18:27:18.753Z",
+      "order": 1
+    },
+    {
+      "_id": "msg_1790361520143",
+      "name": "Ased Ali Sekh",
+      "email": "ased2020ali@gmail.com",
+      "subject": "dsvga",
+      "message": "adzgrgd",
+      "projectType": "Full Stack Development",
+      "budget": "$5k - $15k",
+      "timeline": "1-3 Months",
+      "isRead": false,
+      "isArchived": false,
+      "createdAt": "2026-09-25T18:38:40.143Z",
+      "order": 2
+    },
+    {
+      "_id": "msg_1790411398048",
+      "name": "Ased Ali Sekh",
+      "email": "ased2020ali@gmail.com",
+      "subject": "wqd",
+      "message": "wqdqd",
+      "projectType": "Full Stack Development",
+      "budget": "$5k - $15k",
+      "timeline": "1-3 Months",
+      "isRead": false,
+      "isArchived": false,
+      "createdAt": "2026-09-26T08:29:58.048Z",
+      "order": 3
+    }
+  ],
+  "siteSettings": {
+    "_id": "6ab77e9d763e85a3ab424c86",
+    "siteTitle": "Ased Ali Sekh - Full Stack Developer & Cyber Security Practitioner",
+    "metaDescription": "Futuristic portfolio of Ased - Full Stack Developer and Cyber Security Practitioner.",
+    "keywords": [
+      "Full Stack",
+      "React",
+      "Three.js",
+      "Node.js",
+      "Cyber Security",
+      "AI/ML",
+      "Computer Science"
+    ],
+    "accentColor": "#ff00c8",
+    "ogImage": "https://asedalisekh.github.io/images/portrait.png",
+    "author": "Ased Ali Sekh",
+    "enabledSections": {
+      "hero": true,
+      "about": true,
+      "skills": true,
+      "techOrbit": true,
+      "experience": true,
+      "education": true,
+      "certifications": true,
+      "projects": true,
+      "research": true,
+      "cyberSecurity": true,
+      "achievements": true,
+      "services": true,
+      "testimonials": true,
+      "blog": true,
+      "terminal": true,
+      "contact": true
+    },
+    "customCss": "",
+    "updatedAt": "2026-09-26T09:38:53.052Z",
+    "createdAt": "2026-09-26T08:13:17.426Z",
+    "__v": 0
+  },
+  "analytics": [
+    {
+      "eventType": "contact_submit",
+      "path": "/contact",
+      "targetId": "msg_1790360029093",
+      "userAgent": "node",
+      "_id": "ev_1790360029121_behu",
+      "timestamp": "2026-09-25T18:13:49.121Z"
+    },
+    {
+      "eventType": "contact_submit",
+      "path": "/contact",
+      "targetId": "msg_1790360838752",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36",
+      "_id": "ev_1790360838755_ozmy",
+      "timestamp": "2026-09-25T18:27:18.756Z"
+    },
+    {
+      "eventType": "contact_submit",
+      "path": "/contact",
+      "targetId": "msg_1790361520143",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36",
+      "_id": "ev_1790361520145_8n2p",
+      "timestamp": "2026-09-25T18:38:40.145Z"
+    },
+    {
+      "eventType": "contact_submit",
+      "path": "/contact",
+      "targetId": "msg_1790411398048",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36",
+      "_id": "ev_1790411398050_upsq",
+      "timestamp": "2026-09-26T08:29:58.050Z"
+    }
+  ],
+  "media": [
+    {
+      "_id": "media_1790362085621",
+      "url": "/uploads/file-1790362085597-589784938.png",
+      "filename": "file-1790362085597-589784938.png",
+      "originalName": "Clean-Shaven Professional Headshot.png",
+      "mimeType": "image/png",
+      "size": 2019425,
+      "uploadedAt": "2026-09-25T18:48:05.621Z",
+      "order": 0
+    },
+    {
+      "_id": "media_1790410806211",
+      "url": "/uploads/file-1790410806180-127735213.pdf",
+      "filename": "file-1790410806180-127735213.pdf",
+      "originalName": "Ased Ali Sekh with ph0.pdf",
+      "mimeType": "application/pdf",
+      "size": 268399,
+      "uploadedAt": "2026-09-26T08:20:06.211Z",
+      "order": 1
+    }
+  ]
+}
