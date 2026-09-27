@@ -78,16 +78,14 @@ Open your browser at **`http://localhost:5173/`**.
 
 ## Default Admin Credentials
 
-- **Admin Login Route**: `/admin/login`
-- **Email**: `admin@portfolio.dev`
-- **Password**: `Admin@123456`
+- **Admin Login Route**: `hidden with secure authentication`
 
 ---
 
 ## Features & Highlights
 
 ### 1. Futuristic Visual Identity & 3D Hero
-- **Interactive Three.js Scene**: Dynamic rotating wireframe icosahedron with floating particle constellation reacting to mouse cursor position.
+- **Interactive Three.js**: My 3D model
 - **Interactive Tech Orbit**: 3D technology orbit visualization showcasing modern programming stacks.
 - **Futuristic Custom Cursor**: Outer spring ring with hover expansion and dynamic `"VIEW"` label.
 - **Cyber Initializing Loader**: Telemetry sequence `[AS] SYSTEM INITIALIZING 00 → 100`.
@@ -119,8 +117,7 @@ Open your browser at **`http://localhost:5173/`**.
 | Method | Endpoint | Description | Auth Required |
 |---|---|---|---|
 | `GET` | `/api/health` | System health check | No |
-| `POST` | `/api/auth/login` | Admin login & JWT issue | No |
-| `GET` | `/api/auth/me` | Current authenticated user | Bearer JWT |
+
 | `GET` | `/api/profile` | Developer profile & availability | No |
 | `PUT` | `/api/profile` | Update developer profile | Bearer JWT |
 | `GET` | `/api/projects` | List all projects | No |
@@ -139,5 +136,4 @@ Open your browser at **`http://localhost:5173/`**.
 | `POST` | `/api/contact` | Inbound contact submission | No |
 | `GET` | `/api/contact/messages`| View contact messages | Bearer JWT |
 | `POST` | `/api/media/upload` | Upload media / PDF file | Bearer JWT |
-| `GET` | `/api/settings` | Site settings & SEO | No |
-| `PUT` | `/api/settings` | Update settings & sections | Bearer JWT |
+
