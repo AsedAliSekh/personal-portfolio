@@ -92,7 +92,7 @@ export const uploadMedia = async (req: Request, res: Response) => {
       uploadedAt: new Date().toISOString()
     };
 
-    await dbRepository.create<IMediaItem>('media', mediaItem);
+    await dbRepository.addItem<IMediaItem>('media', mediaItem);
 
     res.status(201).json({
       success: true,
@@ -109,14 +109,14 @@ export const uploadMedia = async (req: Request, res: Response) => {
 
 // ─── Get All Media ───
 export const getMedia = async (req: Request, res: Response) => {
-  const media = await dbRepository.findAll<IMediaItem>('media');
+  const media = await dbRepository.getCollection<IMediaItem>('media');
   res.json({ success: true, data: media });
 };
 
 // ─── Delete Media ───
 export const deleteMedia = async (req: Request, res: Response) => {
   const id = req.params.id as string;
-  const item = await dbRepository.findById<IMediaItem>('media', id);
+  const item = await dbRepository.getItem<IMediaItem>('media', id);
 
   if (item) {
     if (isCloudinaryConfigured && item.cloudinaryPublicId) {
@@ -138,7 +138,7 @@ export const deleteMedia = async (req: Request, res: Response) => {
         }
       }
     }
-    await dbRepository.deleteById('media', id);
+    await dbRepository.deleteItem('media', id);
   }
 
   res.json({ success: true, message: 'Media file removed.' });
