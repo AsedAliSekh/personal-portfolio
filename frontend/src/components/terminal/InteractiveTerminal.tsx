@@ -20,8 +20,8 @@ export const InteractiveTerminal: React.FC<InteractiveTerminalProps> = ({ profil
       command: 'whoami',
       output: (
         <div className="text-cyan-300">
-          <div>{profile?.name || 'Ased'} // {profile?.title || 'Full Stack Engineer & Cyber Researcher'}</div>
-          <div className="text-gray-400 text-xs mt-1">Status: {profile?.statusText || 'Available'} | Location: {profile?.location || 'Remote'}</div>
+          <div>{profile?.name || 'Ased Ali Sekh'} -- {profile?.title || 'Full Stack Developer & Cyber Researcher'}</div>
+          <div className="text-gray-400 text-xs mt-1">Status: {profile?.statusText || 'Available'} | Location: {profile?.location || 'Kolkata/Remote'}</div>
         </div>
       ),
     },
@@ -50,7 +50,7 @@ export const InteractiveTerminal: React.FC<InteractiveTerminalProps> = ({ profil
           <div className="space-y-1 text-gray-300 text-xs">
             <div>Available Commands:</div>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-1 pt-1 text-cyan-300">
-              <div>• whoami - Display digital operator profile</div>
+              <div>• whoami - Display Ased's profile</div>
               <div>• about - Operator summary & philosophy</div>
               <div>• skills - List top engineering proficiencies</div>
               <div>• projects - List featured production systems</div>
@@ -66,7 +66,7 @@ export const InteractiveTerminal: React.FC<InteractiveTerminalProps> = ({ profil
       case 'whoami':
         output = (
           <div className="text-cyan-300">
-            <div>{profile?.name || 'Ased'} [Clearance: Level 5 Root]</div>
+            <div>{profile?.name || 'Ased Ali Sekh'} [--Full Stack Developer & Cyber Researcher]</div>
             <div className="text-xs text-gray-400 mt-0.5">{profile?.bio}</div>
           </div>
         );
@@ -84,7 +84,7 @@ export const InteractiveTerminal: React.FC<InteractiveTerminalProps> = ({ profil
       case 'skills':
         output = (
           <div className="space-y-1 text-xs">
-            <div className="text-gray-400">Verified Technical Stack:</div>
+            <div className="text-gray-400">Technical Stack:</div>
             <div className="flex flex-wrap gap-1.5 pt-1">
               {skills.slice(0, 12).map((s) => (
                 <span key={s.name} className="px-2 py-0.5 rounded bg-cyan-950/80 border border-cyan-500/40 text-cyan-300">
@@ -123,13 +123,12 @@ export const InteractiveTerminal: React.FC<InteractiveTerminalProps> = ({ profil
       case 'sudo':
         output = (
           <div className="text-rose-400 text-xs">
-            Permission denied: You do not possess the biological neural implant for Level 0 Kernel escalation. Try typing <span className="text-cyan-300 font-mono">login</span>.
+            Permission denied: Malik Se permission leke ao pehle....<span className="text-cyan-300 font-mono">login</span>.
           </div>
         );
         break;
 
       case 'admin':
-      case 'login':
       case 'root':
       case 'auth':
       case 'sudo su':
@@ -179,7 +178,7 @@ export const InteractiveTerminal: React.FC<InteractiveTerminalProps> = ({ profil
           <div className="w-3 h-3 rounded-full bg-emerald-500/80" />
           <span className="text-xs text-gray-400 ml-2 flex items-center gap-1.5">
             <TerminalIcon className="w-3.5 h-3.5 text-cyan-400" />
-            ased@mainframe: ~ (bash 5.2)
+            ased@portfolio: ~ (bash 5.2)
           </span>
         </div>
         <div className="text-[10px] text-cyan-400/80 uppercase tracking-widest flex items-center gap-1">
@@ -188,13 +187,13 @@ export const InteractiveTerminal: React.FC<InteractiveTerminalProps> = ({ profil
       </div>
 
       {/* Terminal Output Body */}
-      <div 
+      <div
         ref={terminalBodyRef}
         className="p-5 min-h-[260px] max-h-[380px] overflow-y-auto space-y-3"
         onClick={() => inputRef.current?.focus()}
       >
         <div className="text-gray-500 text-xs">
-          Interactive Mainframe Terminal Shell v2.6. Type <span className="text-cyan-400 font-bold">help</span> to begin.
+          Interactive Portfolio Terminal Shell v2.6. Type <span className="text-cyan-400 font-bold">help</span> to begin.
         </div>
 
         {history.map((item, idx) => (

@@ -51,7 +51,7 @@ export const Footer: React.FC<FooterProps> = ({ profile }) => {
                   {profile?.name || 'Ased Ali Sekh'}
                 </h3>
                 <p className="text-xs font-mono text-cyan-400">
-                  {profile?.title || 'Full Stack & Cyber Security Specialist'}
+                  {profile?.title || 'Developer & Security Practitioner'}
                 </p>
               </div>
             </div>
@@ -66,7 +66,7 @@ export const Footer: React.FC<FooterProps> = ({ profile }) => {
                 {profile?.statusText || 'Available for opportunities'}
               </span>
               <span>•</span>
-              <span>GEO: {profile?.location || 'Bengaluru / Remote'}</span>
+              <span>GEO: {profile?.location || 'Kolkata / Remote'}</span>
             </div>
           </div>
 
@@ -80,7 +80,7 @@ export const Footer: React.FC<FooterProps> = ({ profile }) => {
               <li><a href="#skills" className="hover:text-cyan-300 transition-colors">02 // Skill Matrix</a></li>
               <li><a href="#projects" className="hover:text-cyan-300 transition-colors">03 // Featured Work</a></li>
               <li><a href="#research" className="hover:text-cyan-300 transition-colors">04 // Research & Papers</a></li>
-              <li><Link to="/blog" className="hover:text-cyan-300 transition-colors">05 // Technical Journal</Link></li>
+              <li><a href="#blog" className="hover:text-cyan-300 transition-colors">05 // Technical Journal</a></li>
               <li><a href="#contact" className="hover:text-cyan-300 transition-colors">06 // Encrypted Channel</a></li>
             </ul>
           </div>
@@ -129,7 +129,7 @@ export const Footer: React.FC<FooterProps> = ({ profile }) => {
 
             <div className="mt-6">
               <a
-                href={profile?.resumeUrl || '/uploads/sample_resume.pdf'}
+                href={profile?.resumeUrl || ''}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 text-xs font-mono px-3 py-1.5 rounded-lg border border-cyan-400/30 bg-cyan-950/30 text-cyan-300 hover:bg-cyan-400/10 transition-colors"

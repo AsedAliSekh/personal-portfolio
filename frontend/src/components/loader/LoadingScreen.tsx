@@ -25,7 +25,7 @@ export const LoadingScreen: React.FC<LoadingScreenProps> = ({ onFinish, initials
   useEffect(() => {
     const hasLoadedBefore = sessionStorage.getItem('portfolio_boot_loaded');
     // If loaded recently, boot faster (approx 1s), otherwise full dramatic 2.2s cinematic boot
-    const totalDuration = hasLoadedBefore ? 500 : 1100;
+    const totalDuration = hasLoadedBefore ? 500 : 5000;
     const intervalTime = 30;
     const totalSteps = totalDuration / intervalTime;
     const stepIncrement = 100 / totalSteps;

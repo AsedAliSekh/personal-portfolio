@@ -9,10 +9,10 @@ interface AboutSectionProps {
 
 export const AboutSection: React.FC<AboutSectionProps> = ({ profile }) => {
   const stats = profile?.stats && profile.stats.length > 0 ? profile.stats : [
-    { label: 'Completed Projects', value: '20+', order: 1 },
-    { label: 'Years Experience', value: '3+', order: 2 },
-    { label: 'Open Source Repos', value: '30+', order: 3 },
-    { label: 'Security Audits', value: '15+', order: 4 },
+    { label: 'Completed Projects', value: 'loding...', order: 1 },
+    { label: 'Years Experience', value: 'loding...', order: 2 },
+    { label: 'Open Source Repos', value: 'loding...', order: 3 },
+    { label: 'Security Audits', value: 'loding...', order: 4 },
   ];
 
   return (
@@ -45,7 +45,7 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ profile }) => {
 
               <div className="relative w-full h-full rounded-xl overflow-hidden">
                 <img
-                  src={profile?.avatarUrl || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600&auto=format&fit=crop&q=80'}
+                  src={profile?.avatarUrl || 'https://res.cloudinary.com/xyfuo9xi/image/upload/v1790542116/portfolio-cms/portfolio-cms/1790542116201-Confident-Professional-in-a-Warm-Workspace-500kb.jpeg.jpg'}
                   alt={profile?.name || 'Ased Profile'}
                   className="w-full h-full object-cover object-center filter grayscale contrast-125 group-hover:grayscale-0 group-hover:scale-105 transition-all duration-500"
                 />
@@ -54,13 +54,13 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ profile }) => {
                 {/* Overlay Identity Badge */}
                 <div className="absolute bottom-4 left-4 right-4 p-3 rounded-lg border border-white/10 bg-[#08090B]/85 backdrop-blur-md">
                   <div className="font-heading font-bold text-white text-sm flex items-center justify-between">
-                    <span>{profile?.name || 'Ased'}</span>
+                    <span>{profile?.name || 'Ased Ali Sekh'}</span>
                     <span className="text-[10px] font-mono text-cyan-400 px-2 py-0.5 rounded bg-cyan-950/60 border border-cyan-400/30">
                       &#9734; &#9734; &#9734;
                     </span>
                   </div>
                   <div className="text-xs font-mono text-gray-400 mt-0.5 truncate">
-                    {profile?.title || 'Full Stack & Security'}
+                    {profile?.title || 'Full Stack Developer'}
                   </div>
                 </div>
               </div>
@@ -87,11 +87,11 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ profile }) => {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
               <div className="flex items-center gap-3 p-3 rounded-lg border border-gray-800 bg-[#0d1117]/60 text-xs font-mono text-gray-300">
                 <MapPin className="w-4 h-4 text-cyan-400" />
-                <span>LOCATION: {profile?.location || 'Bengaluru / Remote'}</span>
+                <span>LOCATION: {profile?.location || 'loding...'}</span>
               </div>
               <div className="flex items-center gap-3 p-3 rounded-lg border border-gray-800 bg-[#0d1117]/60 text-xs font-mono text-gray-300">
                 <Briefcase className="w-4 h-4 text-purple-400" />
-                <span>EXP: {profile?.yearsOfExperience || 3}+ Years Active</span>
+                <span>EXP: {profile?.yearsOfExperience || 'loding...'}+ Years Active</span>
               </div>
             </div>
 

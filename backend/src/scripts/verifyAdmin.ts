@@ -7,7 +7,7 @@ import { config } from '../config/env.js';
 async function verifyAndSyncAdmin() {
   await connectDB();
   console.log('Target Admin Email:', config.adminEmail);
-  console.log('Target Admin Password from .env:', config.adminPassword);
+
 
   let user = await UserModel.findOne({ email: config.adminEmail });
   if (!user) {
@@ -15,7 +15,7 @@ async function verifyAndSyncAdmin() {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(config.adminPassword, salt);
     user = await UserModel.create({
-      name: 'Ased (Admin)',
+      name: 'Ased Ali Sekh(Admin)',
       email: config.adminEmail,
       password: hashedPassword,
       role: 'admin'
@@ -42,7 +42,7 @@ async function verifyAndSyncAdmin() {
     const hashedPassword = await bcrypt.hash(config.adminPassword, salt);
     store.addUser({
       _id: 'admin_primary',
-      name: 'Ased (Admin)',
+      name: 'Ased Ali Sekh(Admin)',
       email: config.adminEmail,
       password: hashedPassword,
       role: 'admin',

@@ -66,7 +66,6 @@ export const CyberSecuritySection: React.FC = () => {
   const defaultArsenal = [
     'Linux Mainframe', 'Wireshark', 'Burp Suite Pro', 'Nmap',
     'Metasploit', 'Python Scapy', 'OWASP ZAP', 'Docker Hardening',
-    'eBPF Tracing', 'GDB / Binary Ninja', 'Suricata SIEM', 'Fail2ban'
   ];
 
   const arsenalTools = cyberData?.arsenalTools && cyberData.arsenalTools.length > 0 ? cyberData.arsenalTools : defaultArsenal;

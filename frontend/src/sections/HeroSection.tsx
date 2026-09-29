@@ -22,7 +22,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ profile }) => {
       {/* Background Matrix Grid */}
       <div className="absolute inset-0 bg-grid-cyber opacity-20 pointer-events-none" />
 
-      {/* Floating System Badges (Desktop) */}
+      {/* Floating System Badges (Desktop) 
       <div className="hidden xl:flex flex-col gap-4 absolute left-8 top-1/3 z-20 font-mono text-[11px] text-gray-500 select-none">
         <div className="flex items-center gap-2 px-3 py-1.5 rounded border border-white/5 bg-[#08090B]/60 backdrop-blur-md">
           <Layers className="w-3.5 h-3.5 text-cyan-400" />
@@ -36,7 +36,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ profile }) => {
           <Shield className="w-3.5 h-3.5 text-emerald-400" />
           <span>CYBER SECURITY</span>
         </div>
-      </div>
+      </div> */}
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
@@ -50,7 +50,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ profile }) => {
               className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-cyan-400/30 bg-cyan-950/20 text-xs font-mono text-cyan-300 shadow-[0_0_15px_rgba(34,211,238,0.15)]"
             >
               <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
-              <span>{profile?.statusText?.toUpperCase() || 'AVAILABLE FOR OPPORTUNITIES'}</span>
+              <span>{profile?.statusText?.toUpperCase() || 'SYNCHRONIZING UPDATED DATA FROM DATABASE...'}</span>
             </motion.div>
 
             {/* Main Headline */}
@@ -63,7 +63,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ profile }) => {
               <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-white leading-tight">
                 Hi, I'm{' '}
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400">
-                  {profile?.name || 'Ased'}.
+                  {profile?.name || 'Ased Ali Sekh'}.
                 </span>
               </h1>
               <p className="text-lg sm:text-xl font-mono text-cyan-400/90 font-medium">
@@ -97,7 +97,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ profile }) => {
               </a>
 
               <a
-                href={profile?.resumeUrl || '/uploads/sample_resume.pdf'}
+                href={profile?.resumeUrl || ' '}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="px-6 py-3 rounded-xl border border-gray-800 bg-[#0d1117] text-gray-200 hover:text-white hover:border-gray-700 text-sm font-mono flex items-center gap-2 transition-all hover:bg-white/5"

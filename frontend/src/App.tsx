@@ -84,7 +84,7 @@ const AppContent: React.FC = () => {
     if (siteSettings?.siteTitle) {
       document.title = siteSettings.siteTitle;
     } else if (profile?.name) {
-      document.title = `${profile.name} // Futuristic Portfolio & Research`;
+      document.title = `${profile.name} - Full Stack Developer & Cyber Practitioner`;
     }
 
     // Dynamic Meta Description
