@@ -294,12 +294,25 @@ export interface ISiteSettings {
   updatedAt: string;
 }
 
+export interface IAnalyticsEvent {
+  _id: string;
+  eventType: string;
+  path: string;
+  targetId?: string;
+  referrer?: string;
+  userAgent?: string;
+  timestamp: string;
+}
+
 export interface IAnalyticsSummary {
   totalViews: number;
+  uniqueVisitors: number;
+  todayViews: number;
   projectViews: number;
   blogViews: number;
   contactSubmits: number;
   popularPaths: { path: string; count: number }[];
+  recentEvents?: IAnalyticsEvent[];
   activeProjects: number;
   publishedBlogs: number;
   unreadMessages: number;

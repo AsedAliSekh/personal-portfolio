@@ -256,15 +256,25 @@ class ResilientStore {
     return item;
   }
 
+  public recordAnalytics(event: Omit<IAnalyticsEvent, '_id' | 'timestamp'>) {
+    return this.recordEvent(event);
+  }
+
   public getAnalyticsSummary() {
-    const totalViews = this.data.analytics.filter(e => e.eventType === 'pageview').length;
+    const pageviews = this.data.analytics.filter(e => e.eventType === 'pageview');
+    const totalViews = pageviews.length;
     const projectViews = this.data.analytics.filter(e => e.eventType === 'project_view').length;
     const blogViews = this.data.analytics.filter(e => e.eventType === 'blog_view').length;
-    const contactSubmits = this.data.analytics.filter(e => e.eventType === 'contact_submit').length;
+    const contactSubmits = this.data.messages.length;
+
+    const todayStr = new Date().toISOString().slice(0, 10);
+    const todayViews = pageviews.filter(e => e.timestamp && e.timestamp.startsWith(todayStr)).length;
+    const uniqueAgents = new Set(pageviews.map(e => e.userAgent || 'unknown'));
+    const uniqueVisitors = Math.max(uniqueAgents.size, totalViews > 0 ? 1 : 0);
 
     // Aggregate by path
     const pathCounts: Record<string, number> = {};
-    this.data.analytics.forEach(e => {
+    pageviews.forEach(e => {
       pathCounts[e.path] = (pathCounts[e.path] || 0) + 1;
     });
 
@@ -275,6 +285,8 @@ class ResilientStore {
 
     return {
       totalViews,
+      uniqueVisitors,
+      todayViews,
       projectViews,
       blogViews,
       contactSubmits,

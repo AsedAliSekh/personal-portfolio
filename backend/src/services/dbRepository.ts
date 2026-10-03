@@ -10,7 +10,7 @@ import type {
   IService, ITestimonial, IBlogPost, IMessage,
   ISiteSettings, IAnalyticsEvent, IMediaItem
 } from '../types/index.js';
-
+import { store } from './store.js';
 // Map collection names to corresponding Mongoose models
 const modelMap: Record<string, any> = {
   skills: SkillModel,
@@ -249,28 +249,58 @@ export class DbRepository {
 
   // ================= ANALYTICS =================
   public async recordAnalytics(event: Omit<IAnalyticsEvent, '_id' | 'timestamp'>): Promise<IAnalyticsEvent> {
-    const doc = await AnalyticsModel.create(event);
-    return { ...doc.toObject(), _id: doc._id.toString(), timestamp: doc.timestamp.toISOString() };
+    try {
+      const doc = await AnalyticsModel.create(event);
+      return { ...doc.toObject(), _id: doc._id.toString(), timestamp: doc.timestamp.toISOString() };
+    } catch {
+      return store.recordAnalytics(event);
+    }
   }
 
   public async getAnalyticsSummary(): Promise<any> {
-    const totalViews = await AnalyticsModel.countDocuments({ eventType: 'pageview' });
-    const projectViews = await AnalyticsModel.countDocuments({ eventType: 'project_view' });
-    const blogViews = await AnalyticsModel.countDocuments({ eventType: 'blog_view' });
-    const contactSubmits = await MessageModel.countDocuments();
+    try {
+      const totalViews = await AnalyticsModel.countDocuments({ eventType: 'pageview' });
+      const projectViews = await AnalyticsModel.countDocuments({ eventType: 'project_view' });
+      const blogViews = await AnalyticsModel.countDocuments({ eventType: 'blog_view' });
+      const contactSubmits = await MessageModel.countDocuments();
 
-    const recentEvents = await AnalyticsModel.find()
-      .sort({ timestamp: -1 })
-      .limit(10)
-      .lean();
+      const startOfToday = new Date();
+      startOfToday.setHours(0, 0, 0, 0);
 
-    return {
-      totalViews,
-      projectViews,
-      blogViews,
-      contactSubmits,
-      recentEvents: recentEvents.map((e: any) => ({ ...e, _id: e._id.toString() }))
-    };
+      const todayViews = await AnalyticsModel.countDocuments({
+        eventType: 'pageview',
+        timestamp: { $gte: startOfToday }
+      });
+
+      const distinctAgents = await AnalyticsModel.distinct('userAgent', { eventType: 'pageview' });
+      const uniqueVisitors = Math.max(distinctAgents.length, totalViews > 0 ? 1 : 0);
+
+      const popularPathsAgg = await AnalyticsModel.aggregate([
+        { $match: { eventType: 'pageview' } },
+        { $group: { _id: '$path', count: { $sum: 1 } } },
+        { $sort: { count: -1 } },
+        { $limit: 10 }
+      ]);
+      const popularPaths = popularPathsAgg.map((p: any) => ({ path: p._id, count: p.count }));
+
+      const recentEvents = await AnalyticsModel.find()
+        .sort({ timestamp: -1 })
+        .limit(20)
+        .lean();
+
+      return {
+        totalViews,
+        uniqueVisitors,
+        todayViews,
+        projectViews,
+        blogViews,
+        contactSubmits,
+        popularPaths,
+        recentEvents: recentEvents.map((e: any) => ({ ...e, _id: e._id.toString() }))
+      };
+    } catch {
+      return store.getAnalyticsSummary();
+    }
   }
 }
 

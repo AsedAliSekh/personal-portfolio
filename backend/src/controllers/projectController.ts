@@ -45,8 +45,14 @@ export const getProjectBySlug = async (req: Request, res: Response): Promise<voi
       return;
     }
 
-    // Increment view count in background
+    // Increment view count in background & record analytics
     await dbRepository.incrementProjectViews(slug);
+    dbRepository.recordAnalytics({
+      eventType: 'project_view',
+      path: `/projects/${slug}`,
+      targetId: slug,
+      userAgent: req.headers['user-agent']
+    }).catch(() => {});
 
     // Fetch related projects
     const allProjects = await dbRepository.getCollection<IProject>('projects');

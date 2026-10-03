@@ -73,7 +73,14 @@ export const getBlogPostBySlug = async (req: Request, res: Response): Promise<vo
       return;
     }
 
+    // Increment view count in background & record analytics
     await dbRepository.incrementBlogViews(slug);
+    dbRepository.recordAnalytics({
+      eventType: 'blog_view',
+      path: `/blog/${slug}`,
+      targetId: slug,
+      userAgent: req.headers['user-agent']
+    }).catch(() => {});
 
     // Related posts
     const allPosts = await dbRepository.getCollection<IBlogPost>('blogPosts');

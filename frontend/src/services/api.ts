@@ -83,7 +83,9 @@ export const portfolioApi = {
   markMessageRead: (id: string, isRead = true) => api.patch<{ success: boolean; data: IMessage }>(`/contact/messages/${id}/read`, { isRead }).then(r => r.data.data),
   deleteMessage: (id: string) => api.delete<{ success: boolean }>(`/contact/messages/${id}`).then(r => r.data),
 
-  // Admin Analytics
+  // Analytics Tracking & Admin Reporting
+  recordAnalytics: (data: { eventType: string; path: string; referrer?: string; targetId?: string }) =>
+    api.post<{ success: boolean }>('/analytics', data).then(r => r.data).catch(() => ({ success: false })),
   getAnalytics: () => api.get<{ success: boolean; data: IAnalyticsSummary }>('/analytics/summary').then(r => r.data.data),
 
   // Admin Media Upload

@@ -1,9 +1,10 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { PortfolioDataProvider, usePortfolioData } from './contexts/PortfolioDataContext';
 import { LoadingScreen } from './components/loader/LoadingScreen';
 import { CustomCursor } from './components/cursor/CustomCursor';
+import { portfolioApi } from './services/api';
 
 // Public Pages
 import { HomePage } from './pages/HomePage';
@@ -98,6 +99,28 @@ const AppContent: React.FC = () => {
       metaDesc.setAttribute('content', siteSettings.metaDescription);
     }
   }, [siteSettings, profile]);
+
+  // Automatic Real-Time Inbound Visitor Telemetry Tracking
+  const location = useLocation();
+  const lastTrackedPath = useRef<string>('');
+
+  useEffect(() => {
+    // Only track public visitor routes; do NOT track admin CMS or stealth login routes
+    if (location.pathname.startsWith('/admin') || location.pathname.startsWith('/malikhaihum')) {
+      return;
+    }
+
+    const currentPath = location.pathname;
+    if (lastTrackedPath.current === currentPath) return;
+    lastTrackedPath.current = currentPath;
+
+    // Send anonymous visitor transmission
+    portfolioApi.recordAnalytics({
+      eventType: 'pageview',
+      path: currentPath,
+      referrer: typeof document !== 'undefined' ? document.referrer || '' : ''
+    });
+  }, [location.pathname]);
 
   return (
     <>
