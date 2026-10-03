@@ -65,6 +65,7 @@ export interface ISkill {
   years: number;
   description: string;
   icon: string;
+  logoUrl?: string;
   order: number;
   featured: boolean;
   orbitRadius?: number;

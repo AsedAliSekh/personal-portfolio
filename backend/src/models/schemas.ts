@@ -55,6 +55,7 @@ export const SkillSchema = new Schema({
   years: { type: Number, default: 2 },
   description: { type: String, default: '' },
   icon: { type: String, default: 'Code' },
+  logoUrl: { type: String, default: '' },
   order: { type: Number, default: 0, index: true },
   featured: { type: Boolean, default: true },
   orbitRadius: { type: Number, default: 5 },

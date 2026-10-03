@@ -1,15 +1,21 @@
 import React, { useState } from 'react';
-import { Plus, Edit, Trash2, Code2, Save, X, Star } from 'lucide-react';
+import { 
+  Plus, Edit, Trash2, Code2, Save, X, Star, 
+  Upload, Image as ImageIcon, Link2, Sparkles, AlertCircle 
+} from 'lucide-react';
 import { AdminDashboardLayout } from './AdminDashboardLayout';
 import { usePortfolioData } from '../../contexts/PortfolioDataContext';
 import { portfolioApi } from '../../services/api';
 import { ISkill, SkillCategory } from '../../types';
+import { TechLogo, PRESET_TECH_LOGOS } from '../../components/icons/TechIcons';
 
 export const AdminSkillsPage: React.FC = () => {
   const { skills, refreshData } = usePortfolioData();
   const [editingSkill, setEditingSkill] = useState<Partial<ISkill> | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+  const [isUploadingLogo, setIsUploadingLogo] = useState(false);
+  const [uploadError, setUploadError] = useState<string | null>(null);
   const [feedback, setFeedback] = useState<string | null>(null);
 
   const categories: SkillCategory[] = [
@@ -24,17 +30,41 @@ export const AdminSkillsPage: React.FC = () => {
       proficiency: 85,
       years: 2,
       description: '',
-      icon: 'Atom',
+      icon: 'react',
+      logoUrl: '',
       featured: true,
       orbitRadius: 4.0,
       speed: 1.0,
     });
+    setUploadError(null);
     setIsModalOpen(true);
   };
 
   const handleEdit = (skill: ISkill) => {
     setEditingSkill({ ...skill });
+    setUploadError(null);
     setIsModalOpen(true);
+  };
+
+  const handleLogoFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append('file', file);
+
+    try {
+      setIsUploadingLogo(true);
+      setUploadError(null);
+      const uploadedItem = await portfolioApi.uploadMedia(formData);
+      setEditingSkill((prev) => (prev ? { ...prev, logoUrl: uploadedItem.url } : null));
+    } catch (err: any) {
+      setUploadError(err.response?.data?.message || 'Failed to upload logo image. Make sure backend is running.');
+    } finally {
+      setIsUploadingLogo(false);
+      // Reset input value so same file can be re-uploaded if needed
+      e.target.value = '';
+    }
   };
 
   const handleDelete = async (id: string) => {
@@ -105,14 +135,19 @@ export const AdminSkillsPage: React.FC = () => {
           {skills.map((skill) => (
             <div
               key={skill._id || skill.name}
-              className="p-4 rounded-xl border border-gray-800 bg-[#0d1117] flex flex-col justify-between space-y-3"
+              className="p-4 rounded-xl border border-gray-800 bg-[#0d1117] hover:border-cyan-500/30 transition-all flex flex-col justify-between space-y-3"
             >
               <div className="flex items-start justify-between">
-                <div>
-                  <div className="font-bold text-white text-sm">{skill.name}</div>
-                  <div className="text-[10px] font-mono text-cyan-400 uppercase">{skill.category}</div>
+                <div className="flex items-center gap-3 min-w-0">
+                  <div className="w-10 h-10 rounded-xl bg-black/60 border border-white/10 flex items-center justify-center p-1.5 flex-shrink-0 shadow-[0_0_10px_rgba(34,211,238,0.1)]">
+                    <TechLogo name={skill.name} icon={skill.icon} logoUrl={skill.logoUrl} size={22} />
+                  </div>
+                  <div className="min-w-0">
+                    <div className="font-bold text-white text-sm truncate">{skill.name}</div>
+                    <div className="text-[10px] font-mono text-cyan-400 uppercase">{skill.category}</div>
+                  </div>
                 </div>
-                <div className="flex items-center gap-1.5">
+                <div className="flex items-center gap-1.5 flex-shrink-0">
                   {skill.featured && <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />}
                   <span className="font-mono text-xs font-bold text-white">{skill.proficiency}%</span>
                 </div>
@@ -149,7 +184,7 @@ export const AdminSkillsPage: React.FC = () => {
         {/* Modal */}
         {isModalOpen && editingSkill && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-            <div className="w-full max-w-lg bg-[#0d1117] border border-cyan-500/40 rounded-3xl p-6 space-y-6">
+            <div className="w-full max-w-lg bg-[#0d1117] border border-cyan-500/40 rounded-3xl p-6 space-y-5 max-h-[90vh] overflow-y-auto">
               <div className="flex items-center justify-between pb-3 border-b border-gray-800">
                 <h3 className="font-heading font-extrabold text-lg text-white">
                   {editingSkill._id ? 'Edit Skill' : 'Add New Skill'}
@@ -198,26 +233,125 @@ export const AdminSkillsPage: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="text-gray-400 block mb-1">YEARS EXPERIENCE</label>
-                    <input
-                      type="number"
-                      value={editingSkill.years || 2}
-                      onChange={(e) => setEditingSkill({ ...editingSkill, years: Number(e.target.value) })}
-                      className="w-full px-3 py-2 rounded-xl border border-gray-800 bg-[#08090B] text-white focus:border-cyan-400 focus:outline-none"
-                    />
+                <div>
+                  <label className="text-gray-400 block mb-1">YEARS EXPERIENCE</label>
+                  <input
+                    type="number"
+                    value={editingSkill.years || 2}
+                    onChange={(e) => setEditingSkill({ ...editingSkill, years: Number(e.target.value) })}
+                    className="w-full px-3 py-2 rounded-xl border border-gray-800 bg-[#08090B] text-white focus:border-cyan-400 focus:outline-none"
+                  />
+                </div>
+
+                {/* Dynamic Logo & Icon Configuration */}
+                <div className="p-3.5 rounded-2xl bg-black/40 border border-white/[0.08] space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
+                      <span className="text-gray-300 font-bold tracking-wide">DYNAMIC TECHNOLOGY LOGO</span>
+                    </div>
+                    {editingSkill.logoUrl && (
+                      <button
+                        type="button"
+                        onClick={() => setEditingSkill({ ...editingSkill, logoUrl: '' })}
+                        className="text-[10px] text-rose-400 hover:text-rose-300 underline cursor-pointer"
+                      >
+                        Reset to preset
+                      </button>
+                    )}
                   </div>
 
+                  {/* Live Preview Box */}
+                  <div className="flex items-center gap-3 p-2.5 rounded-xl bg-white/[0.02] border border-white/[0.05]">
+                    <div className="w-12 h-12 rounded-xl bg-[#090b10] border border-white/10 flex items-center justify-center p-2 flex-shrink-0 shadow-[0_0_15px_rgba(34,211,238,0.12)]">
+                      <TechLogo 
+                        name={editingSkill.name || 'Skill'} 
+                        icon={editingSkill.icon} 
+                        logoUrl={editingSkill.logoUrl} 
+                        size={28} 
+                      />
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <div className="text-[11px] font-bold text-white truncate">
+                        {editingSkill.logoUrl ? 'Custom Image / SVG Logo' : (editingSkill.icon ? `Icon: ${editingSkill.icon}` : 'Auto-detected from Skill Name')}
+                      </div>
+                      <div className="text-[10px] text-gray-500 truncate">
+                        {editingSkill.logoUrl || 'Renders crisp vector logo or custom upload'}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Option A: Direct File Upload */}
                   <div>
-                    <label className="text-gray-400 block mb-1">ICON IDENTIFIER</label>
-                    <input
-                      type="text"
-                      value={editingSkill.icon || 'Atom'}
-                      onChange={(e) => setEditingSkill({ ...editingSkill, icon: e.target.value })}
-                      placeholder="Atom, Server, Database, Box"
-                      className="w-full px-3 py-2 rounded-xl border border-gray-800 bg-[#08090B] text-white focus:border-cyan-400 focus:outline-none"
-                    />
+                    <label className="text-gray-400 block mb-1 text-[11px]">UPLOAD LOGO FILE (SVG, PNG, WEBP)</label>
+                    <div className="flex items-center gap-2">
+                      <label className={`btn-cyber-primary px-3 py-1.5 rounded-xl flex items-center gap-2 text-[11px] font-bold cursor-pointer ${isUploadingLogo ? 'opacity-60 cursor-not-allowed' : ''}`}>
+                        <Upload className="w-3.5 h-3.5 text-cyan-400" />
+                        <span>{isUploadingLogo ? 'Uploading...' : 'Choose File to Upload'}</span>
+                        <input
+                          type="file"
+                          accept="image/png,image/jpeg,image/webp,image/svg+xml,image/gif"
+                          disabled={isUploadingLogo}
+                          onChange={handleLogoFileUpload}
+                          className="hidden"
+                        />
+                      </label>
+                      {editingSkill.logoUrl && (
+                        <span className="text-[10px] text-emerald-400 flex items-center gap-1 font-mono">
+                          ✓ Logo loaded
+                        </span>
+                      )}
+                    </div>
+                    {uploadError && (
+                      <div className="mt-1 text-[10px] text-rose-400 flex items-center gap-1 font-mono">
+                        <AlertCircle className="w-3 h-3 flex-shrink-0" />
+                        <span>{uploadError}</span>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Option B: Direct Logo URL */}
+                  <div>
+                    <label className="text-gray-400 block mb-1 text-[11px]">OR LOGO IMAGE / SVG URL</label>
+                    <div className="relative">
+                      <input
+                        type="text"
+                        value={editingSkill.logoUrl || ''}
+                        onChange={(e) => setEditingSkill({ ...editingSkill, logoUrl: e.target.value })}
+                        placeholder="https://example.com/logo.svg or /uploads/..."
+                        className="w-full pl-8 pr-3 py-1.5 rounded-xl border border-gray-800 bg-[#08090B] text-white focus:border-cyan-400 focus:outline-none text-[11px]"
+                      />
+                      <Link2 className="w-3.5 h-3.5 text-gray-500 absolute left-2.5 top-2.5 pointer-events-none" />
+                    </div>
+                  </div>
+
+                  {/* Option C: Preset Tech Selection */}
+                  <div className="grid grid-cols-2 gap-3 pt-1 border-t border-white/[0.05]">
+                    <div>
+                      <label className="text-gray-400 block mb-1 text-[11px]">TECH PRESET LOGO</label>
+                      <select
+                        value={editingSkill.icon || ''}
+                        onChange={(e) => setEditingSkill({ ...editingSkill, icon: e.target.value })}
+                        className="w-full px-2.5 py-1.5 rounded-xl border border-gray-800 bg-[#08090B] text-white focus:border-cyan-400 focus:outline-none text-[11px]"
+                      >
+                        <option value="">Auto (Match Skill Name)</option>
+                        {PRESET_TECH_LOGOS.map((preset) => (
+                          <option key={preset.id} value={preset.id}>
+                            {preset.label}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                    <div>
+                      <label className="text-gray-400 block mb-1 text-[11px]">CUSTOM ICON IDENTIFIER</label>
+                      <input
+                        type="text"
+                        value={editingSkill.icon || ''}
+                        onChange={(e) => setEditingSkill({ ...editingSkill, icon: e.target.value })}
+                        placeholder="python, react, docker, etc."
+                        className="w-full px-2.5 py-1.5 rounded-xl border border-gray-800 bg-[#08090B] text-white focus:border-cyan-400 focus:outline-none text-[11px]"
+                      />
+                    </div>
                   </div>
                 </div>
 
