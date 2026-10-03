@@ -41,6 +41,7 @@ export const Navbar: React.FC<NavbarProps> = ({ initials = 'AS', resumeUrl = '/u
   ];
 
   const handleNavClick = (href: string) => {
+    const wasMobileMenuOpen = isMobileMenuOpen;
     setIsMobileMenuOpen(false);
     if (href.startsWith('#')) {
       if (location.pathname !== '/') {
@@ -49,7 +50,14 @@ export const Navbar: React.FC<NavbarProps> = ({ initials = 'AS', resumeUrl = '/u
       }
       const el = document.querySelector(href);
       if (el) {
-        el.scrollIntoView({ behavior: 'smooth' });
+        if (wasMobileMenuOpen) {
+          // Allow mobile drawer closing animation to settle so smooth scroll is not cancelled
+          setTimeout(() => {
+            el.scrollIntoView({ behavior: 'smooth' });
+          }, 350);
+        } else {
+          el.scrollIntoView({ behavior: 'smooth' });
+        }
       }
     }
   };
@@ -190,9 +198,10 @@ export const Navbar: React.FC<NavbarProps> = ({ initials = 'AS', resumeUrl = '/u
                   </Link>
                 ) : (
                   <button
+                    type="button"
                     key={link.name}
                     onClick={() => handleNavClick(link.href)}
-                    className="text-left text-sm font-mono text-gray-300 hover:text-cyan-300 py-2 border-b border-gray-800/50 flex items-center justify-between"
+                    className="w-full text-left text-sm font-mono text-gray-300 hover:text-cyan-300 py-2 border-b border-gray-800/50 flex items-center justify-between cursor-pointer"
                   >
                     <span>{link.name}</span>
                     <span className="text-xs text-gray-600">#</span>
