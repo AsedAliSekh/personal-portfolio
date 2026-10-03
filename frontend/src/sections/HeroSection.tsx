@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { ArrowDown, FileText, Send, Mail, Shield, Sparkles, Cpu, Layers } from 'lucide-react';
 import { GithubIcon as Github, LinkedinIcon as Linkedin, TwitterIcon as Twitter } from '../components/icons/SocialIcons';
 import { HeroThreeScene } from '../components/3d/HeroThreeScene';
+import { HeroErrorBoundary } from '../components/3d/HeroErrorBoundary';
 import type { IProfile } from '../types';
 
 interface HeroSectionProps {
@@ -140,7 +141,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ profile }) => {
 
           {/* Right Column: Three.js Interactive Hero Digital Universe */}
           <div className="lg:col-span-5 relative flex items-center justify-center">
-            <HeroThreeScene />
+            <HeroErrorBoundary>
+              <HeroThreeScene />
+            </HeroErrorBoundary>
           </div>
         </div>
       </div>
