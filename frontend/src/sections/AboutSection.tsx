@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { MapPin, Briefcase, Calendar, Shield, Award, Terminal, Code2, Sparkles } from 'lucide-react';
 import { IProfile } from '../types';
@@ -8,6 +8,7 @@ interface AboutSectionProps {
 }
 
 export const AboutSection: React.FC<AboutSectionProps> = ({ profile }) => {
+  const [isImageActive, setIsImageActive] = useState(false);
   const stats = profile?.stats && profile.stats.length > 0 ? profile.stats : [
     { label: 'Completed Projects', value: 'loding...', order: 1 },
     { label: 'Years Experience', value: 'loding...', order: 2 },
@@ -36,7 +37,10 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ profile }) => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           {/* Avatar Holographic Display */}
           <div className="lg:col-span-5 flex justify-center">
-            <div className="relative w-72 h-80 sm:w-80 sm:h-96 rounded-2xl p-2 border border-cyan-400/40 bg-[#0d1117] shadow-[0_0_35px_rgba(34,211,238,0.15)] group">
+            <div
+              onClick={() => setIsImageActive((prev) => !prev)}
+              className="relative w-72 h-80 sm:w-80 sm:h-96 rounded-2xl p-2 border border-cyan-400/40 bg-[#0d1117] shadow-[0_0_35px_rgba(34,211,238,0.15)] group cursor-pointer select-none"
+            >
               {/* HUD Corner Brackets */}
               <div className="absolute -top-2 -left-2 w-4 h-4 border-t-2 border-l-2 border-cyan-400" />
               <div className="absolute -top-2 -right-2 w-4 h-4 border-t-2 border-r-2 border-cyan-400" />
@@ -47,7 +51,9 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ profile }) => {
                 <img
                   src={profile?.avatarUrl || 'https://res.cloudinary.com/xyfuo9xi/image/upload/v1790542116/portfolio-cms/portfolio-cms/1790542116201-Confident-Professional-in-a-Warm-Workspace-500kb.jpeg.jpg'}
                   alt={profile?.name || 'Ased Profile'}
-                  className="w-full h-full object-cover object-center filter grayscale contrast-125 group-hover:grayscale-0 group-hover:scale-105 transition-all duration-500"
+                  className={`w-full h-full object-cover object-center filter contrast-125 transition-all duration-500 group-hover:grayscale-0 group-hover:scale-105 group-active:grayscale-0 group-active:scale-105 ${
+                    isImageActive ? 'grayscale-0 scale-105' : 'grayscale'
+                  }`}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#08090B] via-transparent to-transparent opacity-80" />
 
