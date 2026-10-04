@@ -87,6 +87,8 @@ export const HeroThreeScene: React.FC = () => {
   const [loadProgress, setLoadProgress] = useState<number>(0);
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
   const [hasWebGL, setHasWebGL] = useState<boolean>(true);
+  const [isContextLost, setIsContextLost] = useState<boolean>(false);
+  const [reloadKey, setReloadKey] = useState<number>(0);
   const [spectrum, setSpectrum] = useState<HoloSpectrum>('photonic');
   const spectrumRef = useRef<HoloSpectrum>('photonic');
   spectrumRef.current = spectrum;
@@ -144,14 +146,15 @@ export const HeroThreeScene: React.FC = () => {
       }
     };
 
-    const safePixelRatio = Math.min(window.devicePixelRatio || 1, isMobile ? 1.5 : 2);
+    // Mobile-safe pixel ratio: 1.15x is retina-crisp on phones while using ~85% less VRAM to prevent GPU watchdog kills
+    const safePixelRatio = Math.min(window.devicePixelRatio || 1, isMobile ? 1.15 : 2);
 
     let renderer: THREE.WebGLRenderer;
     try {
       renderer = new THREE.WebGLRenderer({
         alpha: true,
-        antialias: true,
-        powerPreference: 'high-performance',
+        antialias: !isMobile, // Disable heavy MSAA framebuffer on mobile to prevent memory crashes
+        powerPreference: isMobile ? 'default' : 'high-performance',
         stencil: false,
         depth: true,
         preserveDrawingBuffer: false,
@@ -749,28 +752,87 @@ export const HeroThreeScene: React.FC = () => {
     };
     window.addEventListener('resize', onResize);
 
-    // ─── 9. WebGL Context Loss Handler ────────────────────────
+    // ─── 9. Viewport Intersection & Rapid-Scroll Memory Guard ───
+    // Pauses the render loop when scrolled offscreen to prevent GPU watchdog crash / black screen!
+    let isVisible = true;
+    let animId = 0;
+    const clock = new THREE.Clock();
+    let prevSpectrum: HoloSpectrum = 'photonic';
+
+    let observer: IntersectionObserver | null = null;
+    if (typeof window !== 'undefined' && 'IntersectionObserver' in window && container) {
+      observer = new IntersectionObserver(
+        (entries) => {
+          for (const entry of entries) {
+            const nowVisible = entry.isIntersecting;
+            if (nowVisible !== isVisible) {
+              isVisible = nowVisible;
+              if (isVisible && isMounted) {
+                // Pre-emptively resume rendering smoothly before entering full viewport
+                clock.getDelta(); // flush any accumulated delta to prevent time jumps
+                if (!animId) {
+                  animId = requestAnimationFrame(animate);
+                }
+              }
+            }
+          }
+        },
+        {
+          root: null,
+          rootMargin: '120px 0px', // Wake up 120px before entering viewport for seamless entrance
+          threshold: 0.01,
+        }
+      );
+      observer.observe(container);
+    }
+
+    const onVisibilityChange = () => {
+      if (document.hidden) {
+        if (animId) {
+          cancelAnimationFrame(animId);
+          animId = 0;
+        }
+      } else if (isVisible && !animId && isMounted) {
+        clock.getDelta();
+        animId = requestAnimationFrame(animate);
+      }
+    };
+    document.addEventListener('visibilitychange', onVisibilityChange);
+
+    // ─── 10. WebGL Context Loss & Restoration Guard ───────────
     const handleContextLost = (e: Event) => {
-      e.preventDefault();
-      console.warn('[Hero3D] WebGL context lost.');
-      cancelAnimationFrame(animId);
+      e.preventDefault(); // CRITICAL: prevents browser from permanently destroying WebGL context
+      console.warn('[Hero3D] WebGL context lost. Suspending render loop.');
+      if (animId) {
+        cancelAnimationFrame(animId);
+        animId = 0;
+      }
+      if (isMounted) {
+        setIsContextLost(true);
+      }
     };
 
     const handleContextRestored = () => {
-      console.info('[Hero3D] WebGL context restored.');
-      fitCameraToViewport();
-      animId = requestAnimationFrame(animate);
+      console.info('[Hero3D] WebGL context restored. Re-mounting scene.');
+      if (isMounted) {
+        setIsContextLost(false);
+        setReloadKey((k) => k + 1);
+      }
     };
 
     renderer.domElement.addEventListener('webglcontextlost', handleContextLost, false);
     renderer.domElement.addEventListener('webglcontextrestored', handleContextRestored, false);
 
-    // ─── 10. Animation Loop ──────────────────────────────────
-    let animId: number;
-    const clock = new THREE.Clock();
-    let prevSpectrum: HoloSpectrum = 'photonic';
-
+    // ─── 11. Animation Loop ──────────────────────────────────
     const animate = () => {
+      if (!isMounted) return;
+
+      // Offscreen or background tab: pause loop to reduce GPU load to 0%
+      if (!isVisible || document.hidden) {
+        animId = 0;
+        return;
+      }
+
       animId = requestAnimationFrame(animate);
       const elapsedTime = clock.getElapsedTime();
 
@@ -899,12 +961,17 @@ export const HeroThreeScene: React.FC = () => {
     };
     animate();
 
-    // ─── 11. Cleanup ──────────────────────────────────────────
+    // ─── 12. Cleanup ──────────────────────────────────────────
     return () => {
       isMounted = false;
-      cancelAnimationFrame(animId);
+      if (animId) {
+        cancelAnimationFrame(animId);
+        animId = 0;
+      }
       if (idleTimer) clearTimeout(idleTimer);
       window.removeEventListener('resize', onResize);
+      document.removeEventListener('visibilitychange', onVisibilityChange);
+      if (observer) observer.disconnect();
 
       if (renderer) {
         renderer.domElement.removeEventListener('webglcontextlost', handleContextLost);
@@ -912,6 +979,18 @@ export const HeroThreeScene: React.FC = () => {
       }
 
       if (controls) controls.dispose();
+
+      // Deep purge of scene meshes, geometries, and materials
+      scene.traverse((object) => {
+        if (object instanceof THREE.Mesh) {
+          if (object.geometry) object.geometry.dispose();
+          if (Array.isArray(object.material)) {
+            object.material.forEach((mat) => mat.dispose());
+          } else if (object.material) {
+            object.material.dispose();
+          }
+        }
+      });
 
       disposables.forEach((item) => {
         if ('dispose' in item && typeof item.dispose === 'function') {
@@ -924,20 +1003,50 @@ export const HeroThreeScene: React.FC = () => {
       }
       if (renderer) renderer.dispose();
     };
-  }, []);
+  }, [reloadKey]);
 
-  if (!hasWebGL) {
+  if (!hasWebGL || isContextLost) {
     return (
-      <div className="relative w-full h-[480px] sm:h-[540px] lg:h-[610px] flex flex-col items-center justify-center p-6 border border-cyan-500/20 rounded-2xl bg-[#08090B]/80 font-mono text-center select-none">
-        <div className="relative w-16 h-16 flex items-center justify-center mb-4 rounded-full border border-cyan-500/30 bg-cyan-950/30">
+      <div className="relative w-full h-[480px] sm:h-[540px] lg:h-[610px] flex flex-col items-center justify-center p-6 border border-cyan-500/25 rounded-2xl bg-[#08090B]/90 font-mono text-center select-none backdrop-blur-md shadow-[0_0_30px_rgba(0,0,0,0.8)] overflow-hidden">
+        {/* Subtle holographic grid lines */}
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#22d3ee08_1px,transparent_1px),linear-gradient(to_bottom,#22d3ee08_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none" />
+
+        {/* Hollywood Sci-Fi Corner HUD Reticle Brackets */}
+        <div className="absolute top-3 left-3 w-4 h-4 border-t border-l border-cyan-400/50 pointer-events-none" />
+        <div className="absolute top-3 right-3 w-4 h-4 border-t border-r border-cyan-400/50 pointer-events-none" />
+        <div className="absolute bottom-3 left-3 w-4 h-4 border-b border-l border-cyan-400/50 pointer-events-none" />
+        <div className="absolute bottom-3 right-3 w-4 h-4 border-b border-r border-cyan-400/50 pointer-events-none" />
+
+        <div className="relative w-16 h-16 flex items-center justify-center mb-4 rounded-full border border-cyan-500/40 bg-cyan-950/40 shadow-[0_0_20px_rgba(34,211,238,0.2)]">
           <Cpu className="w-8 h-8 text-cyan-400 animate-pulse" />
         </div>
+
         <h3 className="text-sm font-semibold text-cyan-300 tracking-wider mb-1">
-          SPATIAL 3D ENGINE STANDBY
+          {isContextLost ? 'SPATIAL 3D ENGINE PAUSED' : 'SPATIAL 3D ENGINE STANDBY'}
         </h3>
-        <p className="text-xs text-gray-400 max-w-xs mb-4">
-          Hardware WebGL acceleration unavailable on this device mode. Mainframe content nominal.
+        <p className="text-xs text-gray-400 max-w-sm mb-5 leading-relaxed">
+          {isContextLost
+            ? 'Graphics acceleration was temporarily suspended during memory load or rapid scrolling. You can instantly restore the 3D avatar without refreshing the webpage.'
+            : 'Hardware WebGL acceleration standby on this device. Click below to initialize 3D avatar.'}
         </p>
+
+        <button
+          type="button"
+          onClick={() => {
+            setIsContextLost(false);
+            setHasWebGL(true);
+            setIsLoaded(false);
+            setReloadKey((k) => k + 1);
+          }}
+          className="group relative flex items-center gap-2.5 px-6 py-2.5 rounded-xl bg-gradient-to-r from-cyan-500/20 via-sky-500/25 to-blue-600/20 hover:from-cyan-500/35 hover:to-blue-600/35 border border-cyan-400/60 hover:border-cyan-300 text-cyan-200 font-mono text-xs font-semibold tracking-wider transition-all duration-300 shadow-[0_0_25px_rgba(34,211,238,0.3)] hover:shadow-[0_0_35px_rgba(34,211,238,0.5)] cursor-pointer active:scale-95"
+        >
+          <RefreshCw className="w-4 h-4 text-cyan-400 transition-transform duration-500 group-hover:rotate-180" />
+          <span>RELOAD 3D MODEL</span>
+        </button>
+
+        <span className="text-[10px] text-cyan-400/60 font-mono mt-3">
+          ◈ IN-PLACE ENGINE REBOOT • ZERO PAGE REFRESH ◈
+        </span>
       </div>
     );
   }
@@ -1034,6 +1143,20 @@ export const HeroThreeScene: React.FC = () => {
                 }`}
             >
               RAW
+            </button>
+
+            {/* In-place Reload 3D Avatar button (Zero webpage refresh) */}
+            <button
+              type="button"
+              onClick={() => {
+                setIsLoaded(false);
+                setReloadKey((k) => k + 1);
+              }}
+              title="Reload 3D Avatar in-place (No page refresh needed)"
+              className="flex items-center gap-1 px-2 py-0.5 rounded-full font-mono text-[9px] font-semibold text-gray-400 hover:text-cyan-300 hover:bg-cyan-500/15 border border-transparent hover:border-cyan-500/30 transition-all duration-200 whitespace-nowrap ml-0.5 cursor-pointer active:scale-95"
+            >
+              <RefreshCw className="w-2.5 h-2.5 text-cyan-400/80" />
+              <span>RELOAD</span>
             </button>
           </div>
 
