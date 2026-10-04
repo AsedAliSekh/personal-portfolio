@@ -72,9 +72,9 @@ export const AdminMessagesPage: React.FC = () => {
             No incoming transmissions recorded yet.
           </div>
         ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 min-h-[500px]">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-6 min-h-[500px]">
             {/* Messages List (5 cols) */}
-            <div className="lg:col-span-5 rounded-2xl border border-gray-800 bg-[#0d1117] overflow-y-auto max-h-[650px] divide-y divide-gray-800/60">
+            <div className="lg:col-span-5 rounded-2xl border border-gray-800 bg-[#0d1117] overflow-y-auto max-h-[320px] lg:max-h-[650px] divide-y divide-gray-800/60">
               {messages.map((msg) => (
                 <div
                   key={msg._id}
@@ -90,10 +90,10 @@ export const AdminMessagesPage: React.FC = () => {
                 >
                   <div className="flex items-center justify-between mb-1">
                     <span className="font-heading font-bold text-white text-sm flex items-center gap-1.5">
-                      {!msg.isRead && <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />}
-                      {msg.name}
+                      {!msg.isRead && <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse shrink-0" />}
+                      <span className="truncate">{msg.name}</span>
                     </span>
-                    <span className="text-[10px] font-mono text-gray-500">
+                    <span className="text-[10px] font-mono text-gray-500 shrink-0 ml-2">
                       {new Date(msg.createdAt).toLocaleDateString()}
                     </span>
                   </div>
@@ -110,7 +110,7 @@ export const AdminMessagesPage: React.FC = () => {
             </div>
 
             {/* Message Detail Pane (7 cols) */}
-            <div className="lg:col-span-7 rounded-2xl border border-gray-800 bg-[#0d1117] p-6 sm:p-8 flex flex-col justify-between">
+            <div className="lg:col-span-7 rounded-2xl border border-gray-800 bg-[#0d1117] p-4 sm:p-8 flex flex-col justify-between">
               {selectedMsg ? (
                 <div className="space-y-6">
                   {/* Header info */}

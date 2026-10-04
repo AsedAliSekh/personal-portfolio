@@ -44,11 +44,11 @@ export const AdminDashboardPage: React.FC = () => {
 
   return (
     <AdminDashboardLayout activeSection="Overview & Analytics">
-      <div className="space-y-8 max-w-7xl mx-auto">
+      <div className="space-y-6 sm:space-y-8 max-w-7xl mx-auto">
         {/* Welcome Banner */}
-        <div className="p-6 rounded-3xl border border-cyan-500/20 bg-gradient-to-r from-cyan-950/30 to-[#0d1117] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="p-4 sm:p-6 rounded-2xl sm:rounded-3xl border border-cyan-500/20 bg-gradient-to-r from-cyan-950/30 to-[#0d1117] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="space-y-1">
-            <h1 className="font-heading font-extrabold text-2xl text-white flex items-center gap-3">
+            <h1 className="font-heading font-extrabold text-xl sm:text-2xl text-white flex items-center gap-2 sm:gap-3 flex-wrap">
               <span>System Command Center</span>
               <span className="px-2 py-0.5 rounded-full bg-cyan-500/10 border border-cyan-500/30 font-mono text-[10px] text-cyan-300 font-normal">
                 v8.2 LIVE
@@ -58,26 +58,26 @@ export const AdminDashboardPage: React.FC = () => {
               Real-time portfolio metrics, live inbound visitor transmissions, and CMS inventory.
             </p>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap items-center gap-2.5 sm:gap-3">
             <button
               type="button"
               onClick={fetchAnalytics}
               disabled={isRefreshing}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-cyan-500/30 bg-cyan-950/40 hover:bg-cyan-500/20 text-cyan-300 font-mono text-xs transition-all active:scale-95 disabled:opacity-50"
+              className="flex items-center gap-1.5 px-3 py-2 rounded-xl border border-cyan-500/30 bg-cyan-950/40 hover:bg-cyan-500/20 text-cyan-300 font-mono text-xs transition-all active:scale-95 disabled:opacity-50 cursor-pointer"
               title="Poll live telemetry"
             >
               <RefreshCw className={`w-3.5 h-3.5 ${isRefreshing ? 'animate-spin text-cyan-400' : ''}`} />
               <span>{isRefreshing ? 'SYNCING...' : 'LIVE REFRESH'}</span>
             </button>
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl border border-emerald-500/30 bg-emerald-950/20">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
-              <span className="text-xs font-mono text-emerald-400">TELEMETRY: ACTIVE</span>
+            <div className="flex items-center gap-2 px-3 py-2 rounded-xl border border-emerald-500/30 bg-emerald-950/20">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping shrink-0" />
+              <span className="text-[11px] sm:text-xs font-mono text-emerald-400 whitespace-nowrap">TELEMETRY: ACTIVE</span>
             </div>
           </div>
         </div>
 
         {/* Analytics KPI Metric Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-5">
           {/* TOTAL TRAFFIC CARD: Real Live Dynamic Visitor Counter */}
           <div className="p-5 rounded-2xl border border-cyan-500/40 bg-gradient-to-br from-[#0d1117] to-cyan-950/20 space-y-2 relative overflow-hidden shadow-[0_0_20px_rgba(34,211,238,0.08)]">
             <div className="absolute top-0 right-0 w-24 h-24 bg-cyan-500/10 rounded-full blur-xl pointer-events-none" />
@@ -145,10 +145,10 @@ export const AdminDashboardPage: React.FC = () => {
         </div>
 
         {/* Real-Time Inbound Visitor Stream Feed */}
-        <div className="p-6 rounded-2xl border border-gray-800 bg-[#0d1117] space-y-4">
+        <div className="p-4 sm:p-6 rounded-2xl border border-gray-800 bg-[#0d1117] space-y-4">
           <div className="flex items-center justify-between flex-wrap gap-2">
             <div className="flex items-center gap-2.5">
-              <div className="p-2 rounded-lg bg-cyan-950/40 border border-cyan-500/20">
+              <div className="p-2 rounded-lg bg-cyan-950/40 border border-cyan-500/20 shrink-0">
                 <Activity className="w-4 h-4 text-cyan-400 animate-pulse" />
               </div>
               <div>
@@ -161,7 +161,7 @@ export const AdminDashboardPage: React.FC = () => {
               </div>
             </div>
             <div className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping" />
+              <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping shrink-0" />
               <span className="text-xs font-mono text-cyan-300">
                 {analytics?.recentEvents?.length || 0} RECENT HITS RECORDED
               </span>
@@ -173,8 +173,8 @@ export const AdminDashboardPage: React.FC = () => {
               No recent visitor events recorded yet. Browse the public portfolio to see transmissions register live!
             </div>
           ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full text-left font-mono text-xs text-gray-300">
+            <div className="overflow-x-auto -mx-1 sm:mx-0 rounded-xl border border-gray-800/60">
+              <table className="w-full min-w-[620px] text-left font-mono text-xs text-gray-300">
                 <thead className="bg-[#08090B] text-gray-500 uppercase border-b border-gray-800 text-[10px] tracking-wider">
                   <tr>
                     <th className="p-3">Event Type</th>
@@ -230,57 +230,57 @@ export const AdminDashboardPage: React.FC = () => {
         </div>
 
         {/* Quick Management Short-links */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
           <Link
             to="/admin/projects"
-            className="p-6 rounded-2xl border border-gray-800 bg-[#0d1117] hover:border-cyan-400/40 hover:shadow-[0_0_20px_rgba(34,211,238,0.1)] transition-all flex items-center justify-between group"
+            className="p-4 sm:p-6 rounded-xl sm:rounded-2xl border border-gray-800 bg-[#0d1117] hover:border-cyan-400/40 hover:shadow-[0_0_20px_rgba(34,211,238,0.1)] transition-all flex items-center justify-between group"
           >
             <div className="space-y-1">
-              <h3 className="font-heading font-bold text-white text-base group-hover:text-cyan-300">
+              <h3 className="font-heading font-bold text-white text-sm sm:text-base group-hover:text-cyan-300">
                 Manage Projects
               </h3>
               <p className="text-xs text-gray-400 font-sans">
                 Add, modify, or reorder showcase architectures.
               </p>
             </div>
-            <ArrowUpRight className="w-5 h-5 text-gray-500 group-hover:text-cyan-400 transition-colors" />
+            <ArrowUpRight className="w-5 h-5 text-gray-500 group-hover:text-cyan-400 transition-colors shrink-0 ml-2" />
           </Link>
 
           <Link
             to="/admin/blog"
-            className="p-6 rounded-2xl border border-gray-800 bg-[#0d1117] hover:border-purple-400/40 hover:shadow-[0_0_20px_rgba(139,92,246,0.1)] transition-all flex items-center justify-between group"
+            className="p-4 sm:p-6 rounded-xl sm:rounded-2xl border border-gray-800 bg-[#0d1117] hover:border-purple-400/40 hover:shadow-[0_0_20px_rgba(139,92,246,0.1)] transition-all flex items-center justify-between group"
           >
             <div className="space-y-1">
-              <h3 className="font-heading font-bold text-white text-base group-hover:text-purple-300">
+              <h3 className="font-heading font-bold text-white text-sm sm:text-base group-hover:text-purple-300">
                 Author Journal Entry
               </h3>
               <p className="text-xs text-gray-400 font-sans">
                 Write &amp; publish markdown technical essays.
               </p>
             </div>
-            <ArrowUpRight className="w-5 h-5 text-gray-500 group-hover:text-purple-400 transition-colors" />
+            <ArrowUpRight className="w-5 h-5 text-gray-500 group-hover:text-purple-400 transition-colors shrink-0 ml-2" />
           </Link>
 
           <Link
             to="/admin/messages"
-            className="p-6 rounded-2xl border border-gray-800 bg-[#0d1117] hover:border-amber-400/40 hover:shadow-[0_0_20px_rgba(245,158,11,0.1)] transition-all flex items-center justify-between group"
+            className="p-4 sm:p-6 rounded-xl sm:rounded-2xl border border-gray-800 bg-[#0d1117] hover:border-amber-400/40 hover:shadow-[0_0_20px_rgba(245,158,11,0.1)] transition-all flex items-center justify-between group"
           >
             <div className="space-y-1">
-              <h3 className="font-heading font-bold text-white text-base group-hover:text-amber-300">
+              <h3 className="font-heading font-bold text-white text-sm sm:text-base group-hover:text-amber-300">
                 View Contact Messages
               </h3>
               <p className="text-xs text-gray-400 font-sans">
                 Read inquiries from recruiters and collaborators.
               </p>
             </div>
-            <ArrowUpRight className="w-5 h-5 text-gray-500 group-hover:text-amber-400 transition-colors" />
+            <ArrowUpRight className="w-5 h-5 text-gray-500 group-hover:text-amber-400 transition-colors shrink-0 ml-2" />
           </Link>
         </div>
 
         {/* Recent Projects Table Preview */}
-        <div className="p-6 rounded-2xl border border-gray-800 bg-[#0d1117] space-y-4">
+        <div className="p-4 sm:p-6 rounded-xl sm:rounded-2xl border border-gray-800 bg-[#0d1117] space-y-4">
           <div className="flex items-center justify-between">
-            <h3 className="font-heading font-bold text-white text-lg">
+            <h3 className="font-heading font-bold text-white text-base sm:text-lg">
               Active Project Inventory
             </h3>
             <Link to="/admin/projects" className="text-xs font-mono text-cyan-400 hover:underline">
@@ -288,8 +288,8 @@ export const AdminDashboardPage: React.FC = () => {
             </Link>
           </div>
 
-          <div className="overflow-x-auto">
-            <table className="w-full text-left font-mono text-xs text-gray-300">
+          <div className="overflow-x-auto -mx-1 sm:mx-0 rounded-xl border border-gray-800/60">
+            <table className="w-full min-w-[540px] text-left font-mono text-xs text-gray-300">
               <thead className="bg-[#08090B] text-gray-500 uppercase border-b border-gray-800">
                 <tr>
                   <th className="p-3">Project Title</th>

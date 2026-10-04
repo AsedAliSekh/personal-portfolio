@@ -183,13 +183,13 @@ export const AdminSkillsPage: React.FC = () => {
 
         {/* Modal */}
         {isModalOpen && editingSkill && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-            <div className="w-full max-w-lg bg-[#0d1117] border border-cyan-500/40 rounded-3xl p-6 space-y-5 max-h-[90vh] overflow-y-auto">
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/80 backdrop-blur-sm overflow-y-auto">
+            <div className="w-full max-w-lg bg-[#0d1117] border border-cyan-500/40 rounded-2xl sm:rounded-3xl p-4 sm:p-6 space-y-5 max-h-[92vh] overflow-y-auto my-auto shadow-2xl">
               <div className="flex items-center justify-between pb-3 border-b border-gray-800">
-                <h3 className="font-heading font-extrabold text-lg text-white">
+                <h3 className="font-heading font-extrabold text-base sm:text-lg text-white">
                   {editingSkill._id ? 'Edit Skill' : 'Add New Skill'}
                 </h3>
-                <button onClick={() => setIsModalOpen(false)} className="text-gray-400 hover:text-white">
+                <button onClick={() => setIsModalOpen(false)} className="text-gray-400 hover:text-white cursor-pointer">
                   <X className="w-5 h-5" />
                 </button>
               </div>
@@ -206,7 +206,7 @@ export const AdminSkillsPage: React.FC = () => {
                   />
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="text-gray-400 block mb-1">CATEGORY</label>
                     <select

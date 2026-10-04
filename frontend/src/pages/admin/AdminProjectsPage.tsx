@@ -113,7 +113,7 @@ export const AdminProjectsPage: React.FC = () => {
         {/* Projects Table */}
         <div className="rounded-2xl border border-gray-800 bg-[#0d1117] overflow-hidden">
           <div className="overflow-x-auto">
-            <table className="w-full text-left font-mono text-xs text-gray-300">
+            <table className="w-full min-w-[720px] text-left font-mono text-xs text-gray-300">
               <thead className="bg-[#08090B] text-gray-500 uppercase border-b border-gray-800">
                 <tr>
                   <th className="p-4">Project</th>
@@ -192,10 +192,10 @@ export const AdminProjectsPage: React.FC = () => {
 
         {/* Edit / Create Modal */}
         {isModalOpen && editingProject && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm overflow-y-auto">
-            <div className="w-full max-w-2xl bg-[#0d1117] border border-cyan-500/40 rounded-3xl p-6 sm:p-8 space-y-6 shadow-2xl my-8">
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/80 backdrop-blur-sm overflow-y-auto">
+            <div className="w-full max-w-2xl bg-[#0d1117] border border-cyan-500/40 rounded-2xl sm:rounded-3xl p-4 sm:p-8 space-y-5 sm:space-y-6 shadow-2xl my-auto max-h-[92vh] overflow-y-auto">
               <div className="flex items-center justify-between pb-4 border-b border-gray-800">
-                <h3 className="font-heading font-extrabold text-lg text-white">
+                <h3 className="font-heading font-extrabold text-base sm:text-lg text-white">
                   {editingProject._id ? 'Edit Project Deployment' : 'Create New Project'}
                 </h3>
                 <button

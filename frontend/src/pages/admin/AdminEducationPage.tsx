@@ -300,13 +300,13 @@ export const AdminEducationPage: React.FC = () => {
 
       {/* Education Modal */}
       {isEduModalOpen && editingEdu && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm overflow-y-auto">
-          <div className="w-full max-w-xl bg-[#0d1117] border border-cyan-500/40 rounded-3xl p-6 sm:p-8 space-y-4 my-8">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/80 backdrop-blur-sm overflow-y-auto">
+          <div className="w-full max-w-xl bg-[#0d1117] border border-cyan-500/40 rounded-2xl sm:rounded-3xl p-4 sm:p-8 space-y-4 my-auto max-h-[92vh] overflow-y-auto shadow-2xl">
             <div className="flex items-center justify-between pb-3 border-b border-gray-800">
-              <h3 className="font-heading font-extrabold text-lg text-white">
+              <h3 className="font-heading font-extrabold text-base sm:text-lg text-white">
                 {editingEdu._id ? 'Edit Education' : 'Add Education'}
               </h3>
-              <button onClick={() => setIsEduModalOpen(false)} className="text-gray-400 hover:text-white">
+              <button onClick={() => setIsEduModalOpen(false)} className="text-gray-400 hover:text-white cursor-pointer">
                 <X className="w-5 h-5" />
               </button>
             </div>
@@ -317,7 +317,7 @@ export const AdminEducationPage: React.FC = () => {
                 <input type="text" required value={editingEdu.degree || ''} onChange={(e) => setEditingEdu({ ...editingEdu, degree: e.target.value })} className={inputCls} placeholder="B.E. Computer Science" />
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className={labelCls}>INSTITUTION *</label>
                   <input type="text" required value={editingEdu.institution || ''} onChange={(e) => setEditingEdu({ ...editingEdu, institution: e.target.value })} className={inputCls} />
@@ -328,7 +328,7 @@ export const AdminEducationPage: React.FC = () => {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className={labelCls}>START YEAR *</label>
                   <input type="text" required value={editingEdu.startYear || ''} onChange={(e) => setEditingEdu({ ...editingEdu, startYear: e.target.value })} className={inputCls} placeholder="2020" />
@@ -373,13 +373,13 @@ export const AdminEducationPage: React.FC = () => {
 
       {/* Certification Modal */}
       {isCertModalOpen && editingCert && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm overflow-y-auto">
-          <div className="w-full max-w-xl bg-[#0d1117] border border-amber-500/40 rounded-3xl p-6 sm:p-8 space-y-4 my-8">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/80 backdrop-blur-sm overflow-y-auto">
+          <div className="w-full max-w-xl bg-[#0d1117] border border-amber-500/40 rounded-2xl sm:rounded-3xl p-4 sm:p-8 space-y-4 my-auto max-h-[92vh] overflow-y-auto shadow-2xl">
             <div className="flex items-center justify-between pb-3 border-b border-gray-800">
-              <h3 className="font-heading font-extrabold text-lg text-white">
+              <h3 className="font-heading font-extrabold text-base sm:text-lg text-white">
                 {editingCert._id ? 'Edit Certification' : 'Add Certification'}
               </h3>
-              <button onClick={() => setIsCertModalOpen(false)} className="text-gray-400 hover:text-white">
+              <button onClick={() => setIsCertModalOpen(false)} className="text-gray-400 hover:text-white cursor-pointer">
                 <X className="w-5 h-5" />
               </button>
             </div>
@@ -390,7 +390,7 @@ export const AdminEducationPage: React.FC = () => {
                 <input type="text" required value={editingCert.title || ''} onChange={(e) => setEditingCert({ ...editingCert, title: e.target.value })} className={inputCls} placeholder="AWS Certified Solutions Architect" />
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className={labelCls}>ISSUING ORGANIZATION *</label>
                   <input type="text" required value={editingCert.issuer || ''} onChange={(e) => setEditingCert({ ...editingCert, issuer: e.target.value })} className={inputCls} />
@@ -401,7 +401,7 @@ export const AdminEducationPage: React.FC = () => {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className={labelCls}>EXPIRATION DATE</label>
                   <input type="text" value={editingCert.expirationDate || ''} onChange={(e) => setEditingCert({ ...editingCert, expirationDate: e.target.value })} className={inputCls} placeholder="Jan 2027 (or leave blank)" />

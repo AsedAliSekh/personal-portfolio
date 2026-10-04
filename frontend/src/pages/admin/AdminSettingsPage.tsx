@@ -171,12 +171,12 @@ export const AdminSettingsPage: React.FC = () => {
             </p>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 overflow-x-auto pb-1 max-w-full -mx-1 px-1">
             {(['profile', 'seo', 'sections'] as const).map(tab => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
-                className={`px-3.5 py-2 rounded-xl text-xs font-mono capitalize transition-all cursor-pointer flex items-center gap-1.5 ${
+                className={`px-3.5 py-2 rounded-xl text-xs font-mono capitalize transition-all cursor-pointer flex items-center gap-1.5 whitespace-nowrap shrink-0 ${
                   activeTab === tab
                     ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-400/40 font-bold'
                     : 'bg-[#0d1117] text-gray-400 hover:text-white border border-gray-800'

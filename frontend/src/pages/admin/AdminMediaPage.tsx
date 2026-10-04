@@ -130,12 +130,12 @@ export const AdminMediaPage: React.FC = () => {
         )}
 
         {/* Filter bar */}
-        <div className="flex items-center gap-2 border-b border-gray-800 pb-3">
+        <div className="flex items-center gap-2 border-b border-gray-800 pb-3 overflow-x-auto -mx-1 px-1">
           {(['all', 'image', 'document'] as const).map(tab => (
             <button
               key={tab}
               onClick={() => setFilterType(tab)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-mono capitalize transition-all cursor-pointer ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-mono capitalize transition-all cursor-pointer whitespace-nowrap shrink-0 ${
                 filterType === tab
                   ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-400/40'
                   : 'text-gray-400 hover:text-white'
