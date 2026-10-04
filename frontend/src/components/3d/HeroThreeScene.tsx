@@ -605,16 +605,21 @@ export const HeroThreeScene: React.FC = () => {
         box.getCenter(center);
         box.getSize(size);
 
+        // Center horizontally and depth-wise
         model.position.x = -center.x;
-        model.position.y = -center.y;
         model.position.z = -center.z;
+        // Align the bottom-most vertex of the model precisely at y = 0
+        model.position.y = -box.min.y;
 
         const maxDim = Math.max(size.x, size.y, size.z);
         // Slightly enlarged avatar size for a commanding, cinematic presence without cropping
         const targetSize = isMobile ? 3.35 : 3.75;
         const scaleFactor = targetSize / maxDim;
         avatarGroup.scale.setScalar(scaleFactor);
-        avatarGroup.position.set(0, 0.12, 0);
+
+        // Float gracefully on top of the two baselines (baseRim1 is at y = -1.44)
+        // Set resting base hover at -1.41 so the model floats on the baseline and never crosses below it
+        avatarGroup.position.set(0, -1.41, 0);
 
         // Inject Hollywood Sci-Fi Holographic Shader into Avatar Materials
         model.traverse((child) => {
@@ -854,8 +859,9 @@ export const HeroThreeScene: React.FC = () => {
         azimuthRef.current.innerText = `${modeLabel} // AZIMUTH: ${deg.toString().padStart(3, '0')}°`;
       }
 
-      // Gentle floating / levitating breathing movement
-      avatarGroup.position.y = 0.12 + Math.sin(elapsedTime * 1.5) * 0.05;
+      // Gentle floating / levitating breathing movement right on top of the baseline (baseRim1 is at -1.44)
+      // Upward-biased hover oscillation ensures the model floats gracefully above the baseline and never crosses it
+      avatarGroup.position.y = -1.41 + (Math.sin(elapsedTime * 1.5) * 0.5 + 0.5) * 0.035;
 
       // Base rings gentle rotational drift
       baseRim1.rotation.z = elapsedTime * 0.1;
