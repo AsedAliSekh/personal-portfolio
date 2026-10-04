@@ -22,7 +22,10 @@ export const ResearchSection: React.FC<ResearchSectionProps> = ({ research }) =>
             05 // SCIENTIFIC RESEARCH  &amp; PAPERS
           </div>
           <h2 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight">
-            Academic Research &amp; Publications
+            Academic Research &nbsp;
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-400">
+              &amp; Publications
+            </span>
           </h2>
           <p className="text-sm font-mono text-gray-400 max-w-xl">
             Here are some noteable academic research papers I've published.

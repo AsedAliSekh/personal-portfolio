@@ -24,7 +24,10 @@ export const BlogPreviewSection: React.FC<BlogPreviewSectionProps> = ({ posts })
               <span>11 // TECHNICAL JOURNALS </span>
             </div>
             <h2 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight">
-              Engineering Insights &amp; Deep Dives
+              Engineering Insights &nbsp;
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-400">
+                &amp; Deep Dives
+              </span>
             </h2>
             <p className="text-sm font-mono text-gray-400 max-w-xl">
               In-depth architectural breakdowns on zero-trust security, real-time WebGL graphics, and localized AI models.

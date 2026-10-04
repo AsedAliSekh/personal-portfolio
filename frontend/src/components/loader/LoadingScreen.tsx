@@ -126,7 +126,7 @@ export const LoadingScreen: React.FC<LoadingScreenProps> = ({ onFinish, initials
             <div className="flex items-center justify-between w-full font-mono text-xs text-gray-400">
               <div className="flex items-center gap-2">
                 <Terminal className="w-3.5 h-3.5 text-cyan-400 animate-pulse" />
-                <span className="text-cyan-400 font-bold tracking-wider">MAINFRAME INITIALIZATION</span>
+                <span className="text-cyan-400 font-bold tracking-wider">PORTFOLIO INITIALIZATION</span>
               </div>
               <span className="text-cyan-300 font-extrabold text-sm drop-shadow-[0_0_8px_#22d3ee]">
                 {Math.round(progress).toString().padStart(3, '0')}%

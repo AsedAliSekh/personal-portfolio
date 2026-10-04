@@ -30,7 +30,10 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ profile }) => {
             01 // ABOUT ME
           </div>
           <h2 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight">
-            Full Stack Developer &amp; Cyber Spectrum
+            Full Stack Developer &nbsp;
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-400">
+              &amp; Cyber Spectrum
+            </span>
           </h2>
         </div>
 
@@ -51,9 +54,8 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ profile }) => {
                 <img
                   src={profile?.avatarUrl || 'https://res.cloudinary.com/xyfuo9xi/image/upload/v1790542116/portfolio-cms/portfolio-cms/1790542116201-Confident-Professional-in-a-Warm-Workspace-500kb.jpeg.jpg'}
                   alt={profile?.name || 'Ased Profile'}
-                  className={`w-full h-full object-cover object-center filter contrast-125 transition-all duration-500 group-hover:grayscale-0 group-hover:scale-105 group-active:grayscale-0 group-active:scale-105 ${
-                    isImageActive ? 'grayscale-0 scale-105' : 'grayscale'
-                  }`}
+                  className={`w-full h-full object-cover object-center filter contrast-125 transition-all duration-500 group-hover:grayscale-0 group-hover:scale-105 group-active:grayscale-0 group-active:scale-105 ${isImageActive ? 'grayscale-0 scale-105' : 'grayscale'
+                    }`}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#08090B] via-transparent to-transparent opacity-80" />
 

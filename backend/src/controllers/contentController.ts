@@ -134,7 +134,17 @@ export const recordAnalytics = async (req: Request, res: Response): Promise<void
       referrer,
       userAgent: req.headers['user-agent']
     });
-    res.status(201).json({ success: true, data: event });
+    const counts = await dbRepository.getVisitorCount();
+    res.status(201).json({ success: true, data: event, ...counts });
+  } catch (error: any) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+export const getVisitorCount = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const counts = await dbRepository.getVisitorCount();
+    res.json({ success: true, data: counts });
   } catch (error: any) {
     res.status(500).json({ success: false, message: error.message });
   }

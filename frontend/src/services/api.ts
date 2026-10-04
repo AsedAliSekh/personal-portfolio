@@ -85,8 +85,9 @@ export const portfolioApi = {
 
   // Analytics Tracking & Admin Reporting
   recordAnalytics: (data: { eventType: string; path: string; referrer?: string; targetId?: string }) =>
-    api.post<{ success: boolean }>('/analytics', data).then(r => r.data).catch(() => ({ success: false })),
+    api.post<{ success: boolean; totalVisitors?: number }>('/analytics', data).then(r => r.data).catch(() => ({ success: false })),
   getAnalytics: () => api.get<{ success: boolean; data: IAnalyticsSummary }>('/analytics/summary').then(r => r.data.data),
+  getVisitorCount: () => api.get<{ success: boolean; data: { totalVisitors: number; todayVisitors: number; uniqueVisitors: number } }>('/analytics/visitor-count').then(r => r.data.data),
 
   // Admin Media Upload
   getMedia: () => api.get<{ success: boolean; data: IMediaItem[] }>('/media').then(r => r.data.data),

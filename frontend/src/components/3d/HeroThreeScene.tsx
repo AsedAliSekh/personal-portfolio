@@ -963,7 +963,7 @@ export const HeroThreeScene: React.FC = () => {
         </div>
       )}
 
-      {/* Top Left: Sci-Fi Telemetry Readout */}
+      {/* Top Left: Sci-Fi Telemetry Readout 
       {isLoaded && (
         <div className="absolute top-3 left-3 hidden sm:flex flex-col gap-0.5 px-2.5 py-1.5 rounded-lg border border-cyan-500/20 bg-[#08090B]/75 backdrop-blur-md font-mono text-[9px] text-cyan-400/80 pointer-events-none tracking-wider shadow-[0_0_12px_rgba(34,211,238,0.08)]">
           <div className="flex items-center gap-1.5 font-semibold text-cyan-300">
@@ -974,7 +974,7 @@ export const HeroThreeScene: React.FC = () => {
             AZIMUTH: 000° // 584.2 THz
           </span>
         </div>
-      )}
+      )}  */}
 
       {/* Top Right: Status indicator pill */}
       {isLoaded && (
@@ -992,46 +992,42 @@ export const HeroThreeScene: React.FC = () => {
             <button
               type="button"
               onClick={() => setSpectrum('photonic')}
-              className={`px-2.5 py-0.5 rounded-full font-mono text-[9px] font-semibold transition-all duration-300 whitespace-nowrap ${
-                spectrum === 'photonic'
-                  ? 'bg-cyan-500/25 text-cyan-300 border border-cyan-500/60 shadow-[0_0_10px_rgba(34,211,238,0.4)]'
-                  : 'text-gray-400 hover:text-cyan-300'
-              }`}
+              className={`px-2.5 py-0.5 rounded-full font-mono text-[9px] font-semibold transition-all duration-300 whitespace-nowrap ${spectrum === 'photonic'
+                ? 'bg-cyan-500/25 text-cyan-300 border border-cyan-500/60 shadow-[0_0_10px_rgba(34,211,238,0.4)]'
+                : 'text-gray-400 hover:text-cyan-300'
+                }`}
             >
               PHOTONIC
             </button>
             <button
               type="button"
               onClick={() => setSpectrum('quantum')}
-              className={`px-2.5 py-0.5 rounded-full font-mono text-[9px] font-semibold transition-all duration-300 whitespace-nowrap ${
-                spectrum === 'quantum'
-                  ? 'bg-purple-500/25 text-purple-300 border border-purple-500/60 shadow-[0_0_10px_rgba(168,85,247,0.4)]'
-                  : 'text-gray-400 hover:text-purple-300'
-              }`}
+              className={`px-2.5 py-0.5 rounded-full font-mono text-[9px] font-semibold transition-all duration-300 whitespace-nowrap ${spectrum === 'quantum'
+                ? 'bg-purple-500/25 text-purple-300 border border-purple-500/60 shadow-[0_0_10px_rgba(168,85,247,0.4)]'
+                : 'text-gray-400 hover:text-purple-300'
+                }`}
             >
               QUANTUM
             </button>
             <button
               type="button"
               onClick={() => setSpectrum('matrix')}
-              className={`px-2.5 py-0.5 rounded-full font-mono text-[9px] font-semibold transition-all duration-300 whitespace-nowrap ${
-                spectrum === 'matrix'
-                  ? 'bg-emerald-500/25 text-emerald-300 border border-emerald-500/60 shadow-[0_0_10px_rgba(16,185,129,0.4)]'
-                  : 'text-gray-400 hover:text-emerald-300'
-              }`}
+              className={`px-2.5 py-0.5 rounded-full font-mono text-[9px] font-semibold transition-all duration-300 whitespace-nowrap ${spectrum === 'matrix'
+                ? 'bg-emerald-500/25 text-emerald-300 border border-emerald-500/60 shadow-[0_0_10px_rgba(16,185,129,0.4)]'
+                : 'text-gray-400 hover:text-emerald-300'
+                }`}
             >
               MATRIX
             </button>
             <button
               type="button"
               onClick={() => setSpectrum('original')}
-              className={`px-2.5 py-0.5 rounded-full font-mono text-[9px] font-semibold transition-all duration-300 whitespace-nowrap ${
-                spectrum === 'original'
-                  ? 'bg-sky-500/25 text-sky-200 border border-sky-400/60 shadow-[0_0_10px_rgba(56,189,248,0.4)]'
-                  : 'text-gray-400 hover:text-sky-300'
-              }`}
+              className={`px-2.5 py-0.5 rounded-full font-mono text-[9px] font-semibold transition-all duration-300 whitespace-nowrap ${spectrum === 'original'
+                ? 'bg-sky-500/25 text-sky-200 border border-sky-400/60 shadow-[0_0_10px_rgba(56,189,248,0.4)]'
+                : 'text-gray-400 hover:text-sky-300'
+                }`}
             >
-              ORIGINAL
+              RAW
             </button>
           </div>
 

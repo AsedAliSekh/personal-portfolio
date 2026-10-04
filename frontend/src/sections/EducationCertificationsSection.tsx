@@ -41,8 +41,8 @@ export const EducationCertificationsSection: React.FC<EducationCertificationsSec
                   07 // ACADEMIC FOUNDATION
                 </div>
                 <h2 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight">
-                  Education &amp;{' '}
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-400">Theory</span>
+                  Education{' '}
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-400"> &amp; Theory</span>
                 </h2>
               </div>
 

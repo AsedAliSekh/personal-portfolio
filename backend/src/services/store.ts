@@ -260,6 +260,20 @@ class ResilientStore {
     return this.recordEvent(event);
   }
 
+  public getVisitorCount() {
+    const pageviews = this.data.analytics.filter(e => e.eventType === 'pageview');
+    const totalViews = pageviews.length;
+    const todayStr = new Date().toISOString().slice(0, 10);
+    const todayViews = pageviews.filter(e => e.timestamp && e.timestamp.startsWith(todayStr)).length;
+    const uniqueAgents = new Set(pageviews.map(e => e.userAgent || 'unknown'));
+    const uniqueVisitors = Math.max(uniqueAgents.size, totalViews > 0 ? 1 : 0);
+    return {
+      totalVisitors: Math.max(totalViews, 1),
+      todayVisitors: Math.max(todayViews, 1),
+      uniqueVisitors: Math.max(uniqueVisitors, 1)
+    };
+  }
+
   public getAnalyticsSummary() {
     const pageviews = this.data.analytics.filter(e => e.eventType === 'pageview');
     const totalViews = pageviews.length;

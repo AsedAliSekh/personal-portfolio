@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowDown, FileText, Send, Mail, Shield, Sparkles, Cpu, Layers } from 'lucide-react';
+import { ArrowDown, FileText, Send, Mail, Shield, Sparkles, Cpu, Layers, Radio } from 'lucide-react';
 import { GithubIcon as Github, LinkedinIcon as Linkedin, TwitterIcon as Twitter } from '../components/icons/SocialIcons';
 import { HeroThreeScene } from '../components/3d/HeroThreeScene';
 import { HeroErrorBoundary } from '../components/3d/HeroErrorBoundary';
+import { portfolioApi } from '../services/api';
 import type { IProfile } from '../types';
 
 interface HeroSectionProps {
@@ -11,6 +12,40 @@ interface HeroSectionProps {
 }
 
 export const HeroSection: React.FC<HeroSectionProps> = ({ profile }) => {
+  const [visitorCount, setVisitorCount] = useState<number | null>(null);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    const fetchVisitorData = async () => {
+      try {
+        const res = await portfolioApi.getVisitorCount();
+        if (isMounted && res?.totalVisitors) {
+          setVisitorCount(res.totalVisitors);
+        }
+      } catch (err) {
+        console.warn('[HeroSection] Telemetry counter poll:', err);
+      }
+    };
+
+    fetchVisitorData();
+    // Live auto-polling every 12 seconds
+    const interval = setInterval(fetchVisitorData, 12000);
+
+    return () => {
+      isMounted = false;
+      clearInterval(interval);
+    };
+  }, []);
+
+  // Compute English ordinal suffix (1st, 2nd, 3rd, 56th, 66th, etc.)
+  const getOrdinal = (n: number): string => {
+    const s = ['th', 'st', 'nd', 'rd'];
+    const v = n % 100;
+    const suffix = s[(v - 20) % 10] || s[v] || s[0];
+    return `${n.toLocaleString()}${suffix}`;
+  };
+
   const titles = profile?.titles || [
     'Full Stack Software Engineer',
     'AI / Machine Learning Practitioner',
@@ -23,35 +58,49 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ profile }) => {
       {/* Background Matrix Grid */}
       <div className="absolute inset-0 bg-grid-cyber opacity-20 pointer-events-none" />
 
-      {/* Floating System Badges (Desktop) 
-      <div className="hidden xl:flex flex-col gap-4 absolute left-8 top-1/3 z-20 font-mono text-[11px] text-gray-500 select-none">
-        <div className="flex items-center gap-2 px-3 py-1.5 rounded border border-white/5 bg-[#08090B]/60 backdrop-blur-md">
-          <Layers className="w-3.5 h-3.5 text-cyan-400" />
-          <span>FULL STACK</span>
-        </div>
-        <div className="flex items-center gap-2 px-3 py-1.5 rounded border border-white/5 bg-[#08090B]/60 backdrop-blur-md">
-          <Cpu className="w-3.5 h-3.5 text-purple-400" />
-          <span>AI / ML RESEARCH</span>
-        </div>
-        <div className="flex items-center gap-2 px-3 py-1.5 rounded border border-white/5 bg-[#08090B]/60 backdrop-blur-md">
-          <Shield className="w-3.5 h-3.5 text-emerald-400" />
-          <span>CYBER SECURITY</span>
-        </div>
-      </div> */}
-
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
           {/* Left Column: Hero Text & Actions */}
           <div className="lg:col-span-7 space-y-6 text-center lg:text-left">
-            {/* Live Availability Status Chip */}
+            {/* Live Availability Status & Real-Time Dynamic Database Visitor Uplink Cluster */}
             <motion.div
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4 }}
-              className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-cyan-400/30 bg-cyan-950/20 text-xs font-mono text-cyan-300 shadow-[0_0_15px_rgba(34,211,238,0.15)]"
+              className="flex flex-wrap items-center justify-center lg:justify-start gap-2.5 sm:gap-3"
             >
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
-              <span>{profile?.statusText?.toUpperCase() || 'SYNCHRONIZING UPDATED DATA FROM DATABASE...'}</span>
+              {/* Availability Chip */}
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-cyan-400/30 bg-cyan-950/20 text-xs font-mono text-cyan-300 shadow-[0_0_15px_rgba(34,211,238,0.15)] backdrop-blur-md">
+                <span className="relative flex h-2 w-2 shrink-0">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400" />
+                </span>
+                <span className="text-[11px] sm:text-xs tracking-wide">
+                  {profile?.statusText?.toUpperCase() || 'AVAILABLE FOR HIRE / SYSTEM ARCHITECTURE'}
+                </span>
+              </div>
+
+              {/* Attractive Real-Time Live Database Visitor Telemetry Badge */}
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-cyan-400/40 bg-gradient-to-r from-cyan-950/40 via-[#0d1117]/80 to-purple-950/30 text-xs font-mono text-cyan-300 shadow-[0_0_20px_rgba(34,211,238,0.2)] backdrop-blur-md transition-all hover:border-cyan-300/60 hover:shadow-[0_0_25px_rgba(34,211,238,0.35)]">
+                <div className="flex items-center gap-1.5 shrink-0">
+
+                  <Radio className="w-3.5 h-3.5 text-cyan-400 animate-pulse shrink-0" />
+                </div>
+
+
+
+                <span className="text-[11px] sm:text-xs text-gray-200">
+                  Welcome! You are the{' '}
+                  <span className="font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-emerald-300 to-cyan-100 drop-shadow-[0_0_8px_rgba(34,211,238,0.6)] px-1.5 py-0.5 rounded bg-cyan-500/10 border border-cyan-400/30 inline-block font-mono tracking-tight">
+                    {visitorCount !== null ? (
+                      getOrdinal(visitorCount)
+                    ) : (
+                      <span className="animate-pulse">#...</span>
+                    )}
+                  </span>{' '}
+                  visitor
+                </span>
+              </div>
             </motion.div>
 
             {/* Main Headline */}

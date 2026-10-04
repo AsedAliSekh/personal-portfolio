@@ -248,6 +248,35 @@ export class DbRepository {
   }
 
   // ================= ANALYTICS =================
+  public async getVisitorCount(): Promise<{ totalVisitors: number; todayVisitors: number; uniqueVisitors: number }> {
+    try {
+      const totalViews = await AnalyticsModel.countDocuments({ eventType: 'pageview' });
+      const startOfToday = new Date();
+      startOfToday.setHours(0, 0, 0, 0);
+
+      const todayViews = await AnalyticsModel.countDocuments({
+        eventType: 'pageview',
+        timestamp: { $gte: startOfToday }
+      });
+
+      const distinctAgents = await AnalyticsModel.distinct('userAgent', { eventType: 'pageview' });
+      const uniqueVisitors = Math.max(distinctAgents.length, totalViews > 0 ? 1 : 0);
+
+      return {
+        totalVisitors: Math.max(totalViews, 1),
+        todayVisitors: Math.max(todayViews, 1),
+        uniqueVisitors
+      };
+    } catch {
+      const summary = store.getAnalyticsSummary();
+      return {
+        totalVisitors: Math.max(summary.totalViews, 1),
+        todayVisitors: Math.max(summary.todayViews, 1),
+        uniqueVisitors: Math.max(summary.uniqueVisitors, 1)
+      };
+    }
+  }
+
   public async recordAnalytics(event: Omit<IAnalyticsEvent, '_id' | 'timestamp'>): Promise<IAnalyticsEvent> {
     try {
       const doc = await AnalyticsModel.create(event);

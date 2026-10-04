@@ -4,7 +4,7 @@ import {
   skillsCrud, experienceCrud, educationCrud, certificationCrud,
   researchCrud, achievementCrud, serviceCrud, testimonialCrud,
   getSettings, updateSettings,
-  recordAnalytics, getAnalyticsSummary
+  recordAnalytics, getAnalyticsSummary, getVisitorCount
 } from '../controllers/contentController.js';
 import { authenticate } from '../middleware/auth.js';
 
@@ -73,6 +73,7 @@ router.put('/settings', authenticate, updateSettings);
 
 // Analytics
 router.post('/analytics', recordAnalytics);
+router.get('/analytics/visitor-count', getVisitorCount);
 router.get('/analytics/summary', authenticate, getAnalyticsSummary);
 
 export default router;
