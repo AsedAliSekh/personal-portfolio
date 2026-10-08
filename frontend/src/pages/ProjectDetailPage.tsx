@@ -81,6 +81,10 @@ export const ProjectDetailPage: React.FC = () => {
             <span className="text-xs font-mono px-3 py-1 rounded-full bg-cyan-950/60 border border-cyan-400/30 text-cyan-300">
               {project.category}
             </span>
+            <span className="text-xs font-mono px-3 py-1 rounded-full bg-emerald-950/60 border border-emerald-400/30 text-emerald-300 flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+              <span>{project.status || 'Fully Developed & Live'}</span>
+            </span>
             {project.completionDate && (
               <span className="text-xs font-mono text-gray-500 flex items-center gap-1">
                 <Calendar className="w-3.5 h-3.5" />
@@ -263,7 +267,7 @@ export const ProjectDetailPage: React.FC = () => {
                 </h4>
                 <div className="text-sm font-mono text-emerald-400 flex items-center gap-1.5">
                   <Shield className="w-4 h-4" />
-                  <span>PASS: ZERO CVEs</span>
+                  <span>{project.securityAudit || 'PASS: ZERO CVEs'}</span>
                 </div>
               </div>
             </div>

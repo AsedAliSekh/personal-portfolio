@@ -100,6 +100,10 @@ export const ProjectsPage: React.FC = () => {
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#0d1117] via-transparent to-transparent opacity-80" />
+                <span className="absolute top-3 left-3 text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-950/85 border border-emerald-400/30 text-emerald-300 backdrop-blur-md flex items-center gap-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                  <span>{project.status || 'Live'}</span>
+                </span>
                 <span className="absolute top-3 right-3 text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-[#08090B]/80 border border-white/10 text-cyan-300 backdrop-blur-md">
                   {project.category}
                 </span>

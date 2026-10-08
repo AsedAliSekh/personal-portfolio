@@ -112,6 +112,8 @@ export const ProjectSchema = new Schema({
   shortDescription: { type: String, required: true },
   detailedDescription: { type: String, default: '' },
   category: { type: String, default: 'Full Stack', index: true },
+  status: { type: String, default: 'Fully Developed & Live' },
+  securityAudit: { type: String, default: 'PASS: ZERO CVEs' },
   thumbnail: { type: String, default: '' },
   gallery: [{ type: String }],
   technologies: [{ type: String }],

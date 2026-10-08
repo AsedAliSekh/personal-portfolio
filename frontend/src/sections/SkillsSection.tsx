@@ -62,9 +62,13 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({ skills }) => {
     { key: 'devops', label: 'DevOps & Cloud' },
   ];
 
+  const sortedSkills = React.useMemo(() => {
+    return [...skills].sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
+  }, [skills]);
+
   const filteredSkills = selectedCategory === 'all'
-    ? skills
-    : skills.filter(s => s.category === selectedCategory);
+    ? sortedSkills
+    : sortedSkills.filter(s => s.category === selectedCategory);
 
   const getAccent = (cat: string) => CATEGORY_ACCENTS[cat] || {
     gradient: 'from-cyan-400 to-blue-500',
@@ -132,7 +136,7 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({ skills }) => {
               <div className="text-center font-mono text-xs text-cyan-400/60 mb-2 uppercase tracking-widest">
                 Orbital Satellite Radial Visualizer
               </div>
-              <TechOrbit skills={skills} />
+              <TechOrbit skills={sortedSkills} />
             </div>
           ) : (
             <>
@@ -141,8 +145,8 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({ skills }) => {
                 {categories.map((cat) => {
                   const isSelected = selectedCategory === cat.key;
                   const count = cat.key === 'all'
-                    ? skills.length
-                    : skills.filter(s => s.category === cat.key).length;
+                    ? sortedSkills.length
+                    : sortedSkills.filter(s => s.category === cat.key).length;
                   return (
                     <button
                       key={cat.key}

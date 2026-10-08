@@ -20,6 +20,50 @@ const getServiceIcon = (iconName: string) => {
   }
 };
 
+const TestimonialAvatar: React.FC<{ name: string; photoUrl?: string }> = ({ name, photoUrl }) => {
+  const [imageFailed, setImageFailed] = React.useState(false);
+
+  // Compute initials (e.g. Salim Aarav -> SA, Evelyn Vance -> EV, John -> J)
+  const initials = React.useMemo(() => {
+    if (!name) return '?';
+    const parts = name.trim().split(/\s+/).filter(Boolean);
+    if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+    return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+  }, [name]);
+
+  const hasValidPhoto = Boolean(photoUrl && photoUrl.trim() && !imageFailed);
+
+  return (
+    <div className="relative shrink-0">
+      {/* Outer cyber ring */}
+      <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl p-[1.5px] bg-gradient-to-br from-purple-500/50 via-cyan-500/30 to-purple-800/40 shadow-[0_0_20px_rgba(168,85,247,0.18)] transition-all duration-300">
+        <div className="w-full h-full rounded-[14px] overflow-hidden bg-[#08090B] flex items-center justify-center relative">
+          {hasValidPhoto ? (
+            <img
+              src={photoUrl}
+              alt={name}
+              onError={() => setImageFailed(true)}
+              className="w-full h-full object-cover transition-transform duration-300 hover:scale-110"
+              loading="lazy"
+            />
+          ) : (
+            <div className="w-full h-full bg-gradient-to-br from-purple-950/90 via-[#10141d] to-cyan-950/80 flex items-center justify-center relative">
+              <div className="absolute inset-0 bg-grid-cyber opacity-20 pointer-events-none" />
+              <span className="font-mono font-bold text-xs sm:text-sm text-transparent bg-clip-text bg-gradient-to-r from-purple-300 to-cyan-300 tracking-wider z-10">
+                {initials}
+              </span>
+            </div>
+          )}
+        </div>
+      </div>
+      {/* Verified Pulse Indicator */}
+      <div className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-[#0d1117] border border-purple-500/40 flex items-center justify-center shadow-sm">
+        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+      </div>
+    </div>
+  );
+};
+
 export const ServicesTestimonialsSection: React.FC<ServicesTestimonialsSectionProps> = ({
   services,
   testimonials,
@@ -117,28 +161,33 @@ export const ServicesTestimonialsSection: React.FC<ServicesTestimonialsSectionPr
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.45, delay: idx * 0.1 }}
-                  className="p-8 rounded-2xl border border-gray-800 bg-[#0d1117] hover:border-purple-500/40 hover:shadow-[0_0_30px_rgba(139,92,246,0.1)] transition-all relative"
+                  className="p-8 rounded-2xl border border-gray-800 bg-[#0d1117] hover:border-purple-500/40 hover:shadow-[0_0_30px_rgba(139,92,246,0.1)] transition-all relative flex flex-col justify-between"
                 >
                   <Quote className="w-8 h-8 text-purple-400/20 absolute top-6 right-6" />
 
-                  <div className="flex items-center gap-1 text-amber-400 mb-4">
-                    {[...Array(t.rating || 5)].map((_, i) => (
-                      <Star key={i} className="w-4 h-4 fill-amber-400" />
-                    ))}
+                  <div>
+                    <div className="flex items-center gap-1 text-amber-400 mb-4">
+                      {[...Array(t.rating || 5)].map((_, i) => (
+                        <Star key={i} className="w-4 h-4 fill-amber-400" />
+                      ))}
+                    </div>
+
+                    <p className="text-sm sm:text-base text-gray-300 font-sans italic leading-relaxed mb-6">
+                      "{t.content}"
+                    </p>
                   </div>
 
-                  <p className="text-sm sm:text-base text-gray-300 font-sans italic leading-relaxed mb-6">
-                    "{t.content}"
-                  </p>
-
-                  <div className="flex items-center justify-between pt-4 border-t border-white/5">
-                    <div>
-                      <h4 className="font-heading font-bold text-white text-base">
-                        {t.name}
-                      </h4>
-                      <p className="text-xs font-mono text-purple-400">
-                        {t.role} • {t.company}
-                      </p>
+                  <div className="flex items-center justify-between pt-5 border-t border-white/5 gap-4">
+                    <div className="flex items-center gap-3.5 min-w-0">
+                      <TestimonialAvatar name={t.name} photoUrl={t.photoUrl} />
+                      <div className="min-w-0">
+                        <h4 className="font-heading font-bold text-white text-base truncate">
+                          {t.name}
+                        </h4>
+                        <p className="text-xs font-mono text-purple-400 truncate">
+                          {t.role} • {t.company}
+                        </p>
+                      </div>
                     </div>
 
                     {t.linkedinUrl && (
@@ -146,7 +195,7 @@ export const ServicesTestimonialsSection: React.FC<ServicesTestimonialsSectionPr
                         href={t.linkedinUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-xs font-mono text-cyan-400 hover:text-cyan-300 underline"
+                        className="text-xs font-mono text-cyan-400 hover:text-cyan-300 underline shrink-0"
                       >
                         LinkedIn Profile →
                       </a>

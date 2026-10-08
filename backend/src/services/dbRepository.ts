@@ -195,15 +195,21 @@ export class DbRepository {
 
   public async reorderCollection(key: string, orderedIds: string[]): Promise<boolean> {
     const Model = modelMap[key];
-    if (!Model) return false;
-    const updates = orderedIds.map((id, index) => {
-      try {
-        return Model.findByIdAndUpdate(id, { order: index });
-      } catch {
-        return Promise.resolve();
-      }
-    });
-    await Promise.allSettled(updates);
+    if (Model) {
+      const updates = orderedIds.map((id, index) => {
+        try {
+          return Model.findByIdAndUpdate(id, { order: index }).exec();
+        } catch {
+          return Promise.resolve();
+        }
+      });
+      await Promise.allSettled(updates);
+    }
+    try {
+      store.reorderCollection(key as any, orderedIds);
+    } catch {
+      // ignore
+    }
     return true;
   }
 

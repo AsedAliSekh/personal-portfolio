@@ -86,6 +86,8 @@ export const createProject = async (req: Request, res: Response): Promise<void> 
       shortDescription: req.body.shortDescription,
       detailedDescription: req.body.detailedDescription || '',
       category: req.body.category || 'Full Stack',
+      status: req.body.status || 'Fully Developed & Live',
+      securityAudit: req.body.securityAudit || 'PASS: ZERO CVEs',
       thumbnail: req.body.thumbnail || '',
       gallery: req.body.gallery || [],
       technologies: req.body.technologies || [],

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Plus, Edit, Trash2, Zap, Quote, Star, X, ToggleLeft, ToggleRight } from 'lucide-react';
+import { Plus, Edit, Trash2, Zap, Quote, Star, X, ToggleLeft, ToggleRight, Upload, User, Image } from 'lucide-react';
 import { AdminDashboardLayout } from './AdminDashboardLayout';
 import { usePortfolioData } from '../../contexts/PortfolioDataContext';
 import { portfolioApi } from '../../services/api';
@@ -19,12 +19,36 @@ export const AdminServicesPage: React.FC = () => {
   const [editingTestimonial, setEditingTestimonial] = useState<Partial<ITestimonial> | null>(null);
   const [isTestimonialModalOpen, setIsTestimonialModalOpen] = useState(false);
 
+  // Photo upload state
+  const [isUploadingPhoto, setIsUploadingPhoto] = useState(false);
+  const [uploadError, setUploadError] = useState<string | null>(null);
+
   const [isSaving, setIsSaving] = useState(false);
   const [feedback, setFeedback] = useState<string | null>(null);
 
   const showFeedback = (msg: string) => {
     setFeedback(msg);
     setTimeout(() => setFeedback(null), 3500);
+  };
+
+  const handlePhotoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append('file', file);
+
+    try {
+      setIsUploadingPhoto(true);
+      setUploadError(null);
+      const uploadedItem = await portfolioApi.uploadMedia(formData);
+      setEditingTestimonial((prev) => (prev ? { ...prev, photoUrl: uploadedItem.url } : null));
+    } catch (err: any) {
+      setUploadError(err.response?.data?.message || 'Failed to upload photo to CDN.');
+    } finally {
+      setIsUploadingPhoto(false);
+      e.target.value = '';
+    }
   };
 
   // ── Service handlers ────────────────────────────────────────────────────
@@ -89,11 +113,13 @@ export const AdminServicesPage: React.FC = () => {
       rating: 5,
       published: true,
     });
+    setUploadError(null);
     setIsTestimonialModalOpen(true);
   };
 
   const handleEditTestimonial = (t: ITestimonial) => {
     setEditingTestimonial({ ...t });
+    setUploadError(null);
     setIsTestimonialModalOpen(true);
   };
 
@@ -246,13 +272,31 @@ export const AdminServicesPage: React.FC = () => {
                 className="p-6 rounded-2xl border border-gray-800 bg-[#0d1117] flex flex-col md:flex-row md:items-start justify-between gap-4"
               >
                 <div className="space-y-2 flex-1">
-                  <div className="flex items-center gap-2">
-                    <div className="w-9 h-9 rounded-full bg-cyan-950 border border-cyan-400/30 flex items-center justify-center font-mono text-sm text-cyan-300 font-bold shrink-0">
-                      {t.name?.[0] || '?'}
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl overflow-hidden border border-purple-500/30 bg-[#08090B] flex items-center justify-center shrink-0 relative">
+                      {t.photoUrl ? (
+                        <img
+                          src={t.photoUrl}
+                          alt={t.name}
+                          className="w-full h-full object-cover"
+                          onError={(e) => {
+                            (e.currentTarget as HTMLImageElement).style.display = 'none';
+                            const fallback = e.currentTarget.parentElement?.querySelector('.admin-avatar-fallback') as HTMLElement;
+                            if (fallback) fallback.style.display = 'flex';
+                          }}
+                        />
+                      ) : null}
+                      <div
+                        className={`admin-avatar-fallback w-full h-full bg-gradient-to-br from-purple-950/80 via-[#12161f] to-cyan-950/80 flex items-center justify-center text-purple-300 font-mono font-bold text-xs ${
+                          t.photoUrl ? 'hidden' : 'flex'
+                        }`}
+                      >
+                        {t.name?.[0] || '?'}
+                      </div>
                     </div>
                     <div>
                       <div className="font-heading font-bold text-white text-sm">{t.name}</div>
-                      <div className="text-xs font-mono text-cyan-400">{t.role} · {t.company}</div>
+                      <div className="text-xs font-mono text-purple-400">{t.role} · {t.company}</div>
                     </div>
                     <div className="flex items-center gap-0.5 ml-2">
                       {Array.from({ length: t.rating || 5 }).map((_, i) => (
@@ -391,15 +435,98 @@ export const AdminServicesPage: React.FC = () => {
                 <textarea rows={4} required value={editingTestimonial.content || ''} onChange={(e) => setEditingTestimonial({ ...editingTestimonial, content: e.target.value })} className={`${inputCls} resize-none`} placeholder="What they said about your work..." />
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className={labelCls}>PHOTO URL</label>
-                  <input type="text" value={editingTestimonial.photoUrl || ''} onChange={(e) => setEditingTestimonial({ ...editingTestimonial, photoUrl: e.target.value })} className={inputCls} placeholder="https://..." />
+              {/* Photo Upload & URL Section */}
+              <div className="space-y-2 p-3.5 rounded-xl border border-gray-800 bg-[#08090B]">
+                <div className="flex items-center justify-between">
+                  <label className={labelCls + ' mb-0 flex items-center gap-1.5'}>
+                    <User className="w-3.5 h-3.5 text-purple-400" />
+                    <span>CLIENT PROFILE PHOTO</span>
+                  </label>
+                  <label className="cursor-pointer inline-flex items-center gap-1.5 px-3 py-1 rounded-lg border border-purple-500/40 bg-purple-950/40 hover:bg-purple-900/50 text-purple-300 text-[11px] font-mono transition-colors">
+                    {isUploadingPhoto ? (
+                      <>
+                        <div className="w-3 h-3 rounded-full border-2 border-purple-400 border-t-transparent animate-spin" />
+                        <span>Uploading...</span>
+                      </>
+                    ) : (
+                      <>
+                        <Upload className="w-3.5 h-3.5" />
+                        <span>Upload Image File</span>
+                      </>
+                    )}
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handlePhotoUpload}
+                      disabled={isUploadingPhoto}
+                      className="hidden"
+                    />
+                  </label>
                 </div>
-                <div>
-                  <label className={labelCls}>LINKEDIN URL</label>
-                  <input type="url" value={editingTestimonial.linkedinUrl || ''} onChange={(e) => setEditingTestimonial({ ...editingTestimonial, linkedinUrl: e.target.value })} className={inputCls} placeholder="https://linkedin.com/in/..." />
+
+                <div className="flex items-center gap-3 pt-1">
+                  {/* Photo Preview / Placeholder */}
+                  <div className="relative w-12 h-12 rounded-xl overflow-hidden border border-purple-500/30 bg-[#0d1117] flex items-center justify-center shrink-0">
+                    {editingTestimonial.photoUrl ? (
+                      <img
+                        src={editingTestimonial.photoUrl}
+                        alt="Preview"
+                        className="w-full h-full object-cover"
+                        onError={(e) => {
+                          (e.currentTarget as HTMLImageElement).style.display = 'none';
+                          const fallback = e.currentTarget.parentElement?.querySelector('.preview-fallback') as HTMLElement;
+                          if (fallback) fallback.style.display = 'flex';
+                        }}
+                      />
+                    ) : null}
+                    <div
+                      className={`preview-fallback w-full h-full bg-gradient-to-br from-purple-950/80 via-[#12161f] to-cyan-950/80 flex items-center justify-center text-purple-300 font-mono font-bold text-xs ${
+                        editingTestimonial.photoUrl ? 'hidden' : 'flex'
+                      }`}
+                    >
+                      {editingTestimonial.name ? editingTestimonial.name.slice(0, 2).toUpperCase() : <User className="w-4 h-4 text-purple-400" />}
+                    </div>
+                  </div>
+
+                  <div className="flex-1 space-y-1">
+                    <input
+                      type="text"
+                      value={editingTestimonial.photoUrl || ''}
+                      onChange={(e) => setEditingTestimonial({ ...editingTestimonial, photoUrl: e.target.value })}
+                      className={inputCls}
+                      placeholder="Paste image URL or click Upload Image above..."
+                    />
+                    <div className="flex items-center justify-between text-[10px] text-gray-500">
+                      <span>Use direct image URL or upload image directly to CDN.</span>
+                      {editingTestimonial.photoUrl && (
+                        <button
+                          type="button"
+                          onClick={() => setEditingTestimonial({ ...editingTestimonial, photoUrl: '' })}
+                          className="text-rose-400 hover:text-rose-300 underline cursor-pointer"
+                        >
+                          Clear Photo
+                        </button>
+                      )}
+                    </div>
+                  </div>
                 </div>
+
+                {uploadError && (
+                  <p className="text-[11px] text-rose-400 font-mono bg-rose-950/30 border border-rose-500/30 px-2.5 py-1 rounded-lg">
+                    {uploadError}
+                  </p>
+                )}
+              </div>
+
+              <div>
+                <label className={labelCls}>LINKEDIN URL</label>
+                <input
+                  type="url"
+                  value={editingTestimonial.linkedinUrl || ''}
+                  onChange={(e) => setEditingTestimonial({ ...editingTestimonial, linkedinUrl: e.target.value })}
+                  className={inputCls}
+                  placeholder="https://linkedin.com/in/..."
+                />
               </div>
 
               <div className="grid grid-cols-2 gap-4">

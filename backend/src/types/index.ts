@@ -122,6 +122,8 @@ export interface IProject {
   shortDescription: string;
   detailedDescription: string;
   category: string;
+  status?: string;
+  securityAudit?: string;
   thumbnail: string;
   gallery: string[];
   technologies: string[];

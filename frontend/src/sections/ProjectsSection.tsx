@@ -89,9 +89,15 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({ projects }) =>
               {/* Text & Content */}
               <div className="lg:col-span-5 p-7 sm:p-10 space-y-6 flex flex-col justify-center">
                 <div>
-                  <span className="text-[10px] font-mono text-cyan-400/70 uppercase tracking-[0.15em] block mb-2">
-                    {featuredProject.category}
-                  </span>
+                  <div className="flex flex-wrap items-center gap-2 mb-2">
+                    <span className="text-[10px] font-mono text-cyan-400/70 uppercase tracking-[0.15em]">
+                      {featuredProject.category}
+                    </span>
+                    <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-950/70 border border-emerald-400/30 text-emerald-300 flex items-center gap-1.5">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                      <span>{featuredProject.status || 'Live / Deployed'}</span>
+                    </span>
+                  </div>
                   <h3 className="text-2xl sm:text-4xl font-extrabold font-heading text-white group-hover:text-cyan-300 transition-colors duration-300">
                     {featuredProject.title}
                   </h3>
@@ -201,6 +207,10 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({ projects }) =>
                 <div className="absolute inset-0 bg-gradient-to-t from-[#0d1117] via-transparent to-transparent opacity-70" />
                 {/* Top image accent */}
                 <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-cyan-400/20 to-transparent group-hover:via-cyan-400/50 transition-all" />
+                <span className="absolute top-3 left-3 text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-950/85 border border-emerald-400/30 text-emerald-300 backdrop-blur-md flex items-center gap-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                  <span>{project.status || 'Live'}</span>
+                </span>
                 <span className="absolute top-3 right-3 text-[10px] font-mono px-2.5 py-1 rounded-lg bg-[#08090d]/85 border border-white/8 text-cyan-300/80 backdrop-blur-md">
                   {project.category}
                 </span>

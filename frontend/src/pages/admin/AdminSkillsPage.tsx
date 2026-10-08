@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Plus, Edit, Trash2, Code2, Save, X, Star, 
-  Upload, Image as ImageIcon, Link2, Sparkles, AlertCircle 
+  Upload, Image as ImageIcon, Link2, Sparkles, AlertCircle,
+  GripVertical, ArrowLeft, ArrowRight
 } from 'lucide-react';
 import { AdminDashboardLayout } from './AdminDashboardLayout';
 import { usePortfolioData } from '../../contexts/PortfolioDataContext';
@@ -11,9 +12,13 @@ import { TechLogo, PRESET_TECH_LOGOS } from '../../components/icons/TechIcons';
 
 export const AdminSkillsPage: React.FC = () => {
   const { skills, refreshData } = usePortfolioData();
+  const [skillList, setSkillList] = useState<ISkill[]>([]);
   const [editingSkill, setEditingSkill] = useState<Partial<ISkill> | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+  const [isReordering, setIsReordering] = useState(false);
+  const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
+  const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
   const [isUploadingLogo, setIsUploadingLogo] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [feedback, setFeedback] = useState<string | null>(null);
@@ -22,6 +27,86 @@ export const AdminSkillsPage: React.FC = () => {
     'frontend', 'backend', 'database', 'programming', 
     'ai_ml', 'cyber_security', 'devops', 'tools'
   ];
+
+  // Sync skillList whenever skills change
+  useEffect(() => {
+    if (skills) {
+      setSkillList([...skills].sort((a, b) => (a.order ?? 0) - (b.order ?? 0)));
+    }
+  }, [skills]);
+
+  const saveNewOrder = async (newList: ISkill[]) => {
+    try {
+      setIsReordering(true);
+      const ids = newList.map(s => s._id).filter(Boolean);
+      await portfolioApi.reorderItems('skills', ids);
+      await refreshData();
+      setFeedback('Skill order updated & synced to portfolio.');
+      setTimeout(() => setFeedback(null), 3000);
+    } catch (err: any) {
+      console.error('Failed to update skill order:', err);
+      setFeedback(err.response?.data?.message || 'Failed to update skill order.');
+      if (skills) {
+        setSkillList([...skills].sort((a, b) => (a.order ?? 0) - (b.order ?? 0)));
+      }
+      setTimeout(() => setFeedback(null), 4000);
+    } finally {
+      setIsReordering(false);
+    }
+  };
+
+  const handleMove = async (currentIndex: number, delta: number) => {
+    const targetIndex = currentIndex + delta;
+    if (targetIndex < 0 || targetIndex >= skillList.length) return;
+
+    const reordered = [...skillList];
+    const [movedItem] = reordered.splice(currentIndex, 1);
+    reordered.splice(targetIndex, 0, movedItem);
+
+    setSkillList(reordered);
+    await saveNewOrder(reordered);
+  };
+
+  const handleDragStart = (e: React.DragEvent, index: number) => {
+    setDraggedIndex(index);
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/plain', index.toString());
+  };
+
+  const handleDragOver = (e: React.DragEvent, index: number) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    if (dragOverIndex !== index) {
+      setDragOverIndex(index);
+    }
+  };
+
+  const handleDragLeave = () => {
+    // Left target
+  };
+
+  const handleDrop = async (e: React.DragEvent, targetIndex: number) => {
+    e.preventDefault();
+    if (draggedIndex === null || draggedIndex === targetIndex) {
+      setDraggedIndex(null);
+      setDragOverIndex(null);
+      return;
+    }
+
+    const reordered = [...skillList];
+    const [movedItem] = reordered.splice(draggedIndex, 1);
+    reordered.splice(targetIndex, 0, movedItem);
+
+    setSkillList(reordered);
+    setDraggedIndex(null);
+    setDragOverIndex(null);
+    await saveNewOrder(reordered);
+  };
+
+  const handleDragEnd = () => {
+    setDraggedIndex(null);
+    setDragOverIndex(null);
+  };
 
   const handleCreate = () => {
     setEditingSkill({
@@ -35,6 +120,7 @@ export const AdminSkillsPage: React.FC = () => {
       featured: true,
       orbitRadius: 4.0,
       speed: 1.0,
+      order: skillList.length,
     });
     setUploadError(null);
     setIsModalOpen(true);
@@ -83,13 +169,28 @@ export const AdminSkillsPage: React.FC = () => {
     e.preventDefault();
     if (!editingSkill) return;
 
+    // Sanitize proficiency and years so user input is properly normalized
+    const prof = editingSkill.proficiency === '' || editingSkill.proficiency === undefined || editingSkill.proficiency === null
+      ? 0
+      : Math.max(0, Math.min(100, Number(editingSkill.proficiency)));
+
+    const yrs = editingSkill.years === '' || editingSkill.years === undefined || editingSkill.years === null
+      ? 0
+      : Math.max(0, Number(editingSkill.years));
+
+    const skillPayload: Partial<ISkill> = {
+      ...editingSkill,
+      proficiency: prof,
+      years: yrs,
+    };
+
     try {
       setIsSaving(true);
       if (editingSkill._id) {
-        await portfolioApi.updateItem<ISkill>('skills', editingSkill._id, editingSkill);
+        await portfolioApi.updateItem<ISkill>('skills', editingSkill._id, skillPayload);
         setFeedback('Skill updated successfully.');
       } else {
-        await portfolioApi.createItem<ISkill>('skills', editingSkill);
+        await portfolioApi.createItem<ISkill>('skills', { ...skillPayload, order: skillList.length });
         setFeedback('Skill created successfully.');
       }
       await refreshData();
@@ -131,54 +232,121 @@ export const AdminSkillsPage: React.FC = () => {
           </div>
         )}
 
+        {/* Reordering helper banner */}
+        <div className="flex flex-wrap items-center justify-between gap-3 p-3.5 rounded-xl bg-cyan-950/20 border border-cyan-500/20 text-xs font-mono text-cyan-300">
+          <div className="flex items-center gap-2">
+            <GripVertical className="w-4 h-4 text-cyan-400 flex-shrink-0" />
+            <span>
+              <strong>Ordering:</strong> Drag cards by hand or use the <ArrowLeft className="w-3 h-3 inline mx-0.5 text-cyan-400" /> / <ArrowRight className="w-3 h-3 inline mx-0.5 text-cyan-400" /> arrows to reorder skills. Ordering reflects directly on your portfolio.
+            </span>
+          </div>
+          {isReordering && (
+            <span className="flex items-center gap-1.5 text-cyan-400 animate-pulse text-[11px] font-bold">
+              <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping" />
+              Syncing order...
+            </span>
+          )}
+        </div>
+
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {skills.map((skill) => (
-            <div
-              key={skill._id || skill.name}
-              className="p-4 rounded-xl border border-gray-800 bg-[#0d1117] hover:border-cyan-500/30 transition-all flex flex-col justify-between space-y-3"
-            >
-              <div className="flex items-start justify-between">
-                <div className="flex items-center gap-3 min-w-0">
-                  <div className="w-10 h-10 rounded-xl bg-black/60 border border-white/10 flex items-center justify-center p-1.5 flex-shrink-0 shadow-[0_0_10px_rgba(34,211,238,0.1)]">
-                    <TechLogo name={skill.name} icon={skill.icon} logoUrl={skill.logoUrl} size={22} />
-                  </div>
-                  <div className="min-w-0">
-                    <div className="font-bold text-white text-sm truncate">{skill.name}</div>
-                    <div className="text-[10px] font-mono text-cyan-400 uppercase">{skill.category}</div>
-                  </div>
-                </div>
-                <div className="flex items-center gap-1.5 flex-shrink-0">
-                  {skill.featured && <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />}
-                  <span className="font-mono text-xs font-bold text-white">{skill.proficiency}%</span>
-                </div>
-              </div>
+          {skillList.map((skill, index) => {
+            const isDragging = draggedIndex === index;
+            const isDragOver = dragOverIndex === index && draggedIndex !== index;
 
-              <div className="w-full h-1.5 bg-gray-900 rounded-full overflow-hidden border border-gray-800">
-                <div
-                  className="h-full bg-cyan-400 rounded-full"
-                  style={{ width: `${skill.proficiency}%` }}
-                />
-              </div>
+            return (
+              <div
+                key={skill._id || `${skill.name}-${index}`}
+                draggable={!isSaving && !isReordering}
+                onDragStart={(e) => handleDragStart(e, index)}
+                onDragOver={(e) => handleDragOver(e, index)}
+                onDragLeave={handleDragLeave}
+                onDrop={(e) => handleDrop(e, index)}
+                onDragEnd={handleDragEnd}
+                className={`p-4 rounded-xl border transition-all duration-200 flex flex-col justify-between space-y-3 select-none ${
+                  isDragging
+                    ? 'opacity-40 border-cyan-500/60 bg-cyan-950/30 scale-[0.98]'
+                    : isDragOver
+                    ? 'border-cyan-400 ring-2 ring-cyan-400/50 bg-[#0d1726] shadow-[0_0_20px_rgba(34,211,238,0.25)] scale-[1.02]'
+                    : 'border-gray-800 bg-[#0d1117] hover:border-cyan-500/40 hover:shadow-[0_4px_20px_rgba(0,0,0,0.4)]'
+                }`}
+              >
+                <div className="flex items-start justify-between gap-2">
+                  <div className="flex items-center gap-2.5 min-w-0">
+                    <div
+                      className="cursor-grab active:cursor-grabbing p-1 text-gray-500 hover:text-cyan-400 rounded-lg hover:bg-white/5 transition-colors flex-shrink-0"
+                      title="Drag to reorder"
+                    >
+                      <GripVertical className="w-4 h-4" />
+                    </div>
+                    <div className="w-10 h-10 rounded-xl bg-black/60 border border-white/10 flex items-center justify-center p-1.5 flex-shrink-0 shadow-[0_0_10px_rgba(34,211,238,0.1)]">
+                      <TechLogo name={skill.name} icon={skill.icon} logoUrl={skill.logoUrl} size={22} />
+                    </div>
+                    <div className="min-w-0">
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-[10px] font-mono text-gray-500 font-bold">#{index + 1}</span>
+                        <div className="font-bold text-white text-sm truncate">{skill.name}</div>
+                      </div>
+                      <div className="text-[10px] font-mono text-cyan-400 uppercase">{skill.category}</div>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-1 flex-shrink-0">
+                    {skill.featured && <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />}
+                    <span className="font-mono text-xs font-bold text-white">{skill.proficiency}%</span>
+                  </div>
+                </div>
 
-              <div className="flex items-center justify-between pt-2 border-t border-white/5 text-[11px] font-mono text-gray-500">
-                <span>{skill.years}y Exp</span>
-                <div className="flex items-center gap-1">
-                  <button
-                    onClick={() => handleEdit(skill)}
-                    className="p-1 hover:text-cyan-400 cursor-pointer"
-                  >
-                    <Edit className="w-3.5 h-3.5" />
-                  </button>
-                  <button
-                    onClick={() => handleDelete(skill._id)}
-                    className="p-1 hover:text-rose-400 cursor-pointer"
-                  >
-                    <Trash2 className="w-3.5 h-3.5" />
-                  </button>
+                <div className="w-full h-1.5 bg-gray-900 rounded-full overflow-hidden border border-gray-800">
+                  <div
+                    className="h-full bg-cyan-400 rounded-full"
+                    style={{ width: `${skill.proficiency}%` }}
+                  />
+                </div>
+
+                <div className="flex items-center justify-between pt-2 border-t border-white/5 text-[11px] font-mono text-gray-500">
+                  <div className="flex items-center gap-2">
+                    <span>{skill.years}y Exp</span>
+                    {/* Reorder Arrows */}
+                    <div className="flex items-center gap-0.5 ml-1 border-l border-white/10 pl-2">
+                      <button
+                        type="button"
+                        onClick={() => handleMove(index, -1)}
+                        disabled={index === 0 || isReordering}
+                        title="Move skill earlier"
+                        className="p-1 rounded text-gray-500 hover:text-cyan-400 hover:bg-cyan-950/40 disabled:opacity-20 disabled:hover:text-gray-500 cursor-pointer disabled:cursor-not-allowed transition-all"
+                      >
+                        <ArrowLeft className="w-3.5 h-3.5" />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleMove(index, 1)}
+                        disabled={index === skillList.length - 1 || isReordering}
+                        title="Move skill later"
+                        className="p-1 rounded text-gray-500 hover:text-cyan-400 hover:bg-cyan-950/40 disabled:opacity-20 disabled:hover:text-gray-500 cursor-pointer disabled:cursor-not-allowed transition-all"
+                      >
+                        <ArrowRight className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <button
+                      onClick={() => handleEdit(skill)}
+                      className="p-1 hover:text-cyan-400 cursor-pointer"
+                      title="Edit skill"
+                    >
+                      <Edit className="w-3.5 h-3.5" />
+                    </button>
+                    <button
+                      onClick={() => handleDelete(skill._id)}
+                      className="p-1 hover:text-rose-400 cursor-pointer"
+                      title="Delete skill"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
 
         {/* Modal */}
@@ -226,8 +394,14 @@ export const AdminSkillsPage: React.FC = () => {
                       type="number"
                       min={0}
                       max={100}
-                      value={editingSkill.proficiency || 85}
-                      onChange={(e) => setEditingSkill({ ...editingSkill, proficiency: Number(e.target.value) })}
+                      value={editingSkill.proficiency ?? ''}
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        setEditingSkill({ 
+                          ...editingSkill, 
+                          proficiency: val === '' ? ('' as unknown as number) : Number(val) 
+                        });
+                      }}
                       className="w-full px-3 py-2 rounded-xl border border-gray-800 bg-[#08090B] text-white focus:border-cyan-400 focus:outline-none"
                     />
                   </div>
@@ -237,8 +411,15 @@ export const AdminSkillsPage: React.FC = () => {
                   <label className="text-gray-400 block mb-1">YEARS EXPERIENCE</label>
                   <input
                     type="number"
-                    value={editingSkill.years || 2}
-                    onChange={(e) => setEditingSkill({ ...editingSkill, years: Number(e.target.value) })}
+                    min={0}
+                    value={editingSkill.years ?? ''}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      setEditingSkill({ 
+                        ...editingSkill, 
+                        years: val === '' ? ('' as unknown as number) : Number(val) 
+                      });
+                    }}
                     className="w-full px-3 py-2 rounded-xl border border-gray-800 bg-[#08090B] text-white focus:border-cyan-400 focus:outline-none"
                   />
                 </div>
@@ -304,7 +485,7 @@ export const AdminSkillsPage: React.FC = () => {
                     </div>
                     {uploadError && (
                       <div className="mt-1 text-[10px] text-rose-400 flex items-center gap-1 font-mono">
-                        <AlertCircle className="w-3 h-3 flex-shrink-0" />
+                        <AlertCircle className="w-3.5 h-3.5 flex-shrink-0" />
                         <span>{uploadError}</span>
                       </div>
                     )}
@@ -382,7 +563,7 @@ export const AdminSkillsPage: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => setIsModalOpen(false)}
-                    className="px-4 py-2 rounded-xl border border-gray-800 text-gray-400"
+                    className="px-4 py-2 rounded-xl border border-gray-800 text-gray-400 hover:text-white transition-colors cursor-pointer"
                   >
                     Cancel
                   </button>

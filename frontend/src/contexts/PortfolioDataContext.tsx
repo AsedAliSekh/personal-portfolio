@@ -67,8 +67,14 @@ export const PortfolioDataProvider: React.FC<{ children: React.ReactNode }> = ({
       ]);
 
       if (profileRes.status === 'fulfilled') setProfile(profileRes.value);
-      if (skillsRes.status === 'fulfilled') setSkills(skillsRes.value);
-      if (expRes.status === 'fulfilled') setExperience(expRes.value);
+      if (skillsRes.status === 'fulfilled') {
+        const sortedSkills = [...skillsRes.value].sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
+        setSkills(sortedSkills);
+      }
+      if (expRes.status === 'fulfilled') {
+        const sortedExp = [...expRes.value].sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
+        setExperience(sortedExp);
+      }
       if (eduRes.status === 'fulfilled') setEducation(eduRes.value);
       if (certRes.status === 'fulfilled') setCertifications(certRes.value);
       if (projRes.status === 'fulfilled') setProjects(projRes.value);

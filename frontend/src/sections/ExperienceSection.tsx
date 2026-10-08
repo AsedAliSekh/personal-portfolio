@@ -8,6 +8,10 @@ interface ExperienceSectionProps {
 }
 
 export const ExperienceSection: React.FC<ExperienceSectionProps> = ({ experience }) => {
+  const sortedExperience = React.useMemo(() => {
+    return [...experience].sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
+  }, [experience]);
+
   return (
     <section id="experience" className="relative py-28 border-t border-white/5 overflow-hidden" style={{ background: '#08090d' }}>
       {/* Background Grid */}
@@ -40,7 +44,7 @@ export const ExperienceSection: React.FC<ExperienceSectionProps> = ({ experience
           <div className="absolute left-[19px] sm:left-[35px] top-0 bottom-0 w-px bg-gradient-to-b from-cyan-500/50 via-cyan-500/20 to-transparent" />
 
           <div className="ml-10 sm:ml-20 space-y-10">
-            {experience.map((exp, index) => (
+            {sortedExperience.map((exp, index) => (
               <motion.div
                 key={exp._id || exp.company}
                 initial={{ opacity: 0, x: -25 }}
