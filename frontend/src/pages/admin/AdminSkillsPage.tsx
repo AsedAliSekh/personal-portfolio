@@ -170,13 +170,14 @@ export const AdminSkillsPage: React.FC = () => {
     if (!editingSkill) return;
 
     // Sanitize proficiency and years so user input is properly normalized
-    const prof = editingSkill.proficiency === '' || editingSkill.proficiency === undefined || editingSkill.proficiency === null
+    const prof = (editingSkill.proficiency as unknown as string) === '' || editingSkill.proficiency === undefined || editingSkill.proficiency === null
       ? 0
       : Math.max(0, Math.min(100, Number(editingSkill.proficiency)));
 
-    const yrs = editingSkill.years === '' || editingSkill.years === undefined || editingSkill.years === null
+    const yrs = (editingSkill.years as unknown as string) === '' || editingSkill.years === undefined || editingSkill.years === null
       ? 0
       : Math.max(0, Number(editingSkill.years));
+
 
     const skillPayload: Partial<ISkill> = {
       ...editingSkill,

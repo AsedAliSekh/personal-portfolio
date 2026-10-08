@@ -9,20 +9,27 @@ import { Footer } from '../components/footer/Footer';
 export const BlogPage: React.FC = () => {
   const { blogPosts, profile } = usePortfolioData();
   const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [selectedTag, setSelectedTag] = useState<string>('all');
 
   const published = blogPosts.filter((b) => b.isPublished);
 
+  // Extract all categories dynamically from articles
+  const allCategories = Array.from(new Set(published.map((b) => b.category).filter(Boolean)));
   // Extract all tags
   const allTags = Array.from(new Set(published.flatMap((b) => b.tags || [])));
 
   const filtered = published.filter((post) => {
+    const matchesCategory =
+      selectedCategory === 'all' ||
+      post.category.toLowerCase() === selectedCategory.toLowerCase();
     const matchesTag = selectedTag === 'all' || post.tags?.includes(selectedTag);
     const matchesSearch =
       post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       post.excerpt.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      post.category.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesTag && matchesSearch;
+      post.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      post.tags?.some((t) => t.toLowerCase().includes(searchQuery.toLowerCase()));
+    return matchesCategory && matchesTag && matchesSearch;
   });
 
   return (
@@ -53,44 +60,81 @@ export const BlogPage: React.FC = () => {
           </p>
         </div>
 
-        {/* Search & Tag Filter */}
-        <div className="flex flex-col md:flex-row gap-4 mb-10 items-stretch md:items-center justify-between">
-          <div className="flex flex-wrap gap-2">
-            <button
-              onClick={() => setSelectedTag('all')}
-              className={`px-3.5 py-1.5 rounded-lg text-xs font-mono transition-all cursor-pointer ${
-                selectedTag === 'all'
-                  ? 'bg-cyan-400 text-black font-bold shadow-[0_0_15px_rgba(34,211,238,0.4)]'
-                  : 'border border-gray-800 bg-[#0d1117] text-gray-400 hover:text-white'
-              }`}
-            >
-              All Topics
-            </button>
-            {allTags.map((tag) => (
+        {/* Category & Search Filter Bar */}
+        <div className="space-y-4 mb-10">
+          <div className="flex flex-col md:flex-row gap-4 items-stretch md:items-center justify-between">
+            {/* Dynamic Categories */}
+            <div className="flex flex-wrap items-center gap-2">
               <button
-                key={tag}
-                onClick={() => setSelectedTag(tag)}
-                className={`px-3 py-1.5 rounded-lg text-xs font-mono transition-all cursor-pointer ${
-                  selectedTag === tag
+                onClick={() => setSelectedCategory('all')}
+                className={`px-3.5 py-1.5 rounded-lg text-xs font-mono transition-all cursor-pointer ${
+                  selectedCategory === 'all'
                     ? 'bg-cyan-400 text-black font-bold shadow-[0_0_15px_rgba(34,211,238,0.4)]'
                     : 'border border-gray-800 bg-[#0d1117] text-gray-400 hover:text-white'
                 }`}
               >
-                #{tag}
+                All Categories ({published.length})
               </button>
-            ))}
+              {allCategories.map((cat) => {
+                const count = published.filter(p => p.category.toLowerCase() === cat.toLowerCase()).length;
+                return (
+                  <button
+                    key={cat}
+                    onClick={() => setSelectedCategory(cat)}
+                    className={`px-3.5 py-1.5 rounded-lg text-xs font-mono transition-all cursor-pointer ${
+                      selectedCategory.toLowerCase() === cat.toLowerCase()
+                        ? 'bg-cyan-400 text-black font-bold shadow-[0_0_15px_rgba(34,211,238,0.4)]'
+                        : 'border border-gray-800 bg-[#0d1117] text-gray-400 hover:text-white'
+                    }`}
+                  >
+                    {cat} ({count})
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Search Input */}
+            <div className="relative w-full md:w-72 shrink-0">
+              <Search className="w-4 h-4 text-gray-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search essays, concepts..."
+                className="w-full pl-10 pr-4 py-2 rounded-xl border border-gray-800 bg-[#0d1117] text-xs font-mono text-white placeholder-gray-500 focus:border-cyan-400 focus:outline-none"
+              />
+            </div>
           </div>
 
-          <div className="relative w-full md:w-72">
-            <Search className="w-4 h-4 text-gray-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search essays, concepts..."
-              className="w-full pl-10 pr-4 py-2 rounded-xl border border-gray-800 bg-[#0d1117] text-xs font-mono text-white placeholder-gray-500 focus:border-cyan-400 focus:outline-none"
-            />
-          </div>
+          {/* Sub-tag chips (if tags exist) */}
+          {allTags.length > 0 && (
+            <div className="flex flex-wrap items-center gap-1.5 pt-1">
+              <span className="text-[11px] font-mono text-gray-500 mr-1">TOPIC TAGS:</span>
+              <button
+                onClick={() => setSelectedTag('all')}
+                className={`px-2 py-0.5 rounded text-[11px] font-mono transition-colors cursor-pointer ${
+                  selectedTag === 'all'
+                    ? 'bg-purple-500/20 text-purple-300 border border-purple-400/40'
+                    : 'text-gray-500 hover:text-gray-300 border border-transparent'
+                }`}
+              >
+                #all
+              </button>
+              {allTags.map((tag) => (
+                <button
+                  key={tag}
+                  onClick={() => setSelectedTag(selectedTag === tag ? 'all' : tag)}
+                  className={`px-2 py-0.5 rounded text-[11px] font-mono transition-colors cursor-pointer ${
+                    selectedTag === tag
+                      ? 'bg-purple-500/30 text-purple-200 border border-purple-400/50'
+                      : 'text-gray-400 hover:text-cyan-300 bg-[#0d1117] border border-gray-800'
+                  }`}
+                >
+                  #{tag}
+                </button>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* Articles Grid */}
