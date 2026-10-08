@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { 
   Settings, Save, Check, AlertCircle, RefreshCw, 
-  Sliders, User, Globe, Eye, Palette, BarChart3, Plus, Trash2 
+  Sliders, User, Globe, Eye, Palette, BarChart3, Plus, Trash2, Upload 
 } from 'lucide-react';
 import { AdminDashboardLayout } from './AdminDashboardLayout';
 import { usePortfolioData } from '../../contexts/PortfolioDataContext';
@@ -27,6 +27,52 @@ export const AdminSettingsPage: React.FC = () => {
   const [isSaving, setIsSaving] = useState(false);
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+
+  // Direct CDN upload states
+  const [isUploadingAvatar, setIsUploadingAvatar] = useState(false);
+  const [isUploadingResume, setIsUploadingResume] = useState(false);
+  const [avatarUploadError, setAvatarUploadError] = useState<string | null>(null);
+  const [resumeUploadError, setResumeUploadError] = useState<string | null>(null);
+
+  const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append('file', file);
+
+    try {
+      setIsUploadingAvatar(true);
+      setAvatarUploadError(null);
+      const uploadedItem = await portfolioApi.uploadMedia(formData);
+      setProfileForm((prev) => ({ ...prev, avatarUrl: uploadedItem.url }));
+    } catch (err: any) {
+      setAvatarUploadError(err.response?.data?.message || 'Failed to upload avatar.');
+    } finally {
+      setIsUploadingAvatar(false);
+      e.target.value = '';
+    }
+  };
+
+  const handleResumeUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append('file', file);
+
+    try {
+      setIsUploadingResume(true);
+      setResumeUploadError(null);
+      const uploadedItem = await portfolioApi.uploadMedia(formData);
+      setProfileForm((prev) => ({ ...prev, resumeUrl: uploadedItem.url }));
+    } catch (err: any) {
+      setResumeUploadError(err.response?.data?.message || 'Failed to upload resume document.');
+    } finally {
+      setIsUploadingResume(false);
+      e.target.value = '';
+    }
+  };
 
   useEffect(() => {
     if (profile) {
@@ -358,22 +404,75 @@ export const AdminSettingsPage: React.FC = () => {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="text-[11px] font-mono text-gray-400 block mb-1">AVATAR IMAGE URL</label>
+                  <div className="flex items-center justify-between mb-1">
+                    <label className="text-[11px] font-mono text-gray-400 block mb-0">AVATAR IMAGE URL</label>
+                    <label className="cursor-pointer inline-flex items-center gap-1.5 px-2 py-0.5 rounded-lg border border-cyan-500/40 bg-cyan-950/40 hover:bg-cyan-900/50 text-cyan-300 text-[10px] font-mono transition-colors">
+                      {isUploadingAvatar ? (
+                        <>
+                          <div className="w-2.5 h-2.5 rounded-full border-2 border-cyan-400 border-t-transparent animate-spin" />
+                          <span>Uploading...</span>
+                        </>
+                      ) : (
+                        <>
+                          <Upload className="w-3 h-3 text-cyan-400" />
+                          <span>Upload Avatar</span>
+                        </>
+                      )}
+                      <input
+                        type="file"
+                        accept="image/*"
+                        disabled={isUploadingAvatar}
+                        onChange={handleAvatarUpload}
+                        className="hidden"
+                      />
+                    </label>
+                  </div>
                   <input
                     type="text"
                     value={profileForm.avatarUrl || ''}
                     onChange={e => setProfileForm(p => ({ ...p, avatarUrl: e.target.value }))}
                     className="w-full px-3 py-2 rounded-xl bg-[#08090b] border border-gray-800 text-white text-xs font-mono focus:border-cyan-400 focus:outline-none"
+                    placeholder="https://... or click Upload Avatar"
                   />
+                  {avatarUploadError && (
+                    <p className="text-[10px] text-rose-400 font-mono mt-1">{avatarUploadError}</p>
+                  )}
                 </div>
+
                 <div>
-                  <label className="text-[11px] font-mono text-gray-400 block mb-1">RESUME / CV URL</label>
+                  <div className="flex items-center justify-between mb-1">
+                    <label className="text-[11px] font-mono text-gray-400 block mb-0">RESUME / CV URL</label>
+                    <label className="cursor-pointer inline-flex items-center gap-1.5 px-2 py-0.5 rounded-lg border border-cyan-500/40 bg-cyan-950/40 hover:bg-cyan-900/50 text-cyan-300 text-[10px] font-mono transition-colors">
+                      {isUploadingResume ? (
+                        <>
+                          <div className="w-2.5 h-2.5 rounded-full border-2 border-cyan-400 border-t-transparent animate-spin" />
+                          <span>Uploading...</span>
+                        </>
+                      ) : (
+                        <>
+                          <Upload className="w-3 h-3 text-cyan-400" />
+                          <span>Upload Resume PDF</span>
+                        </>
+                      )}
+                      <input
+                        type="file"
+                        accept="application/pdf"
+                        disabled={isUploadingResume}
+                        onChange={handleResumeUpload}
+                        className="hidden"
+                      />
+                    </label>
+                  </div>
                   <input
                     type="text"
                     value={profileForm.resumeUrl || ''}
                     onChange={e => setProfileForm(p => ({ ...p, resumeUrl: e.target.value }))}
                     className="w-full px-3 py-2 rounded-xl bg-[#08090b] border border-gray-800 text-white text-xs font-mono focus:border-cyan-400 focus:outline-none"
+                    placeholder="https://... or click Upload Resume PDF"
                   />
+                  {resumeUploadError && (
+                    <p className="text-[10px] text-rose-400 font-mono mt-1">{resumeUploadError}</p>
+                  )}
                 </div>
               </div>
             </div>

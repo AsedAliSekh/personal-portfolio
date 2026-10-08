@@ -279,6 +279,7 @@ export const AnalyticsSchema = new Schema({
 // Media Schema
 export const MediaSchema = new Schema({
   url: { type: String, required: true },
+  cloudinaryPublicId: { type: String, default: '' },
   filename: { type: String, required: true },
   originalName: { type: String, default: '' },
   mimeType: { type: String, default: '' },

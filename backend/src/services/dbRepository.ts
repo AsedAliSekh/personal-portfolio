@@ -1,3 +1,4 @@
+import mongoose from 'mongoose';
 import {
   UserModel, ProfileModel, SkillModel, ExperienceModel,
   EducationModel, CertificationModel, ProjectModel, ResearchModel,
@@ -151,7 +152,12 @@ export class DbRepository {
     const Model = modelMap[key];
     if (!Model) return null;
     try {
-      const doc = await Model.findById(id).lean();
+      let doc = mongoose.Types.ObjectId.isValid(id)
+        ? await Model.findById(id).lean()
+        : await Model.findOne({ _id: id }).lean();
+      if (!doc) {
+        doc = await Model.findOne({ filename: id }).lean();
+      }
       if (!doc) return null;
       return { ...(doc as any), _id: (doc as any)._id.toString() };
     } catch {
@@ -186,7 +192,11 @@ export class DbRepository {
     const Model = modelMap[key];
     if (!Model) return false;
     try {
-      await Model.findByIdAndDelete(id);
+      if (mongoose.Types.ObjectId.isValid(id)) {
+        await Model.findByIdAndDelete(id);
+      } else {
+        await Model.deleteOne({ _id: id });
+      }
       return true;
     } catch {
       return false;

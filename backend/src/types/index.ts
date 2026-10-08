@@ -234,6 +234,13 @@ export interface IMessage {
   createdAt: string;
 }
 
+export interface IMediaUsage {
+  type: string;
+  title: string;
+  field: string;
+  id?: string;
+}
+
 export interface IMediaItem {
   _id: string;
   url: string;
@@ -243,6 +250,7 @@ export interface IMediaItem {
   mimeType: string;
   size: number;
   uploadedAt: string;
+  usedIn?: IMediaUsage[];
 }
 
 export interface IEnabledSections {

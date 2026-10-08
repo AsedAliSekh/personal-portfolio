@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Plus, Edit, Trash2, GraduationCap, Award, X, BookOpen } from 'lucide-react';
+import { Plus, Edit, Trash2, GraduationCap, Award, X, BookOpen, Upload } from 'lucide-react';
 import { AdminDashboardLayout } from './AdminDashboardLayout';
 import { usePortfolioData } from '../../contexts/PortfolioDataContext';
 import { portfolioApi } from '../../services/api';
@@ -18,6 +18,8 @@ export const AdminEducationPage: React.FC = () => {
   // Certification state
   const [editingCert, setEditingCert] = useState<Partial<ICertification> | null>(null);
   const [isCertModalOpen, setIsCertModalOpen] = useState(false);
+  const [isUploadingCert, setIsUploadingCert] = useState(false);
+  const [certUploadError, setCertUploadError] = useState<string | null>(null);
 
   const [isSaving, setIsSaving] = useState(false);
   const [feedback, setFeedback] = useState<string | null>(null);
@@ -97,7 +99,28 @@ export const AdminEducationPage: React.FC = () => {
 
   const handleEditCert = (cert: ICertification) => {
     setEditingCert({ ...cert });
+    setCertUploadError(null);
     setIsCertModalOpen(true);
+  };
+
+  const handleCertUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append('file', file);
+
+    try {
+      setIsUploadingCert(true);
+      setCertUploadError(null);
+      const uploadedItem = await portfolioApi.uploadMedia(formData);
+      setEditingCert((prev) => (prev ? { ...prev, certificateImageUrl: uploadedItem.url } : null));
+    } catch (err: any) {
+      setCertUploadError(err.response?.data?.message || 'Failed to upload certificate file to CDN.');
+    } finally {
+      setIsUploadingCert(false);
+      e.target.value = '';
+    }
   };
 
   const handleDeleteCert = async (id: string) => {
@@ -418,8 +441,39 @@ export const AdminEducationPage: React.FC = () => {
               </div>
 
               <div>
-                <label className={labelCls}>CERTIFICATE IMAGE URL</label>
-                <input type="text" value={editingCert.certificateImageUrl || ''} onChange={(e) => setEditingCert({ ...editingCert, certificateImageUrl: e.target.value })} className={inputCls} placeholder="https://..." />
+                <div className="flex items-center justify-between mb-1">
+                  <label className={labelCls + ' mb-0'}>CERTIFICATE IMAGE OR PDF</label>
+                  <label className="cursor-pointer inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg border border-cyan-500/40 bg-cyan-950/40 hover:bg-cyan-900/50 text-cyan-300 text-[11px] font-mono transition-colors">
+                    {isUploadingCert ? (
+                      <>
+                        <div className="w-3 h-3 rounded-full border-2 border-cyan-400 border-t-transparent animate-spin" />
+                        <span>Uploading...</span>
+                      </>
+                    ) : (
+                      <>
+                        <Upload className="w-3.5 h-3.5 text-cyan-400" />
+                        <span>Upload File to CDN</span>
+                      </>
+                    )}
+                    <input
+                      type="file"
+                      accept="image/*,application/pdf"
+                      disabled={isUploadingCert}
+                      onChange={handleCertUpload}
+                      className="hidden"
+                    />
+                  </label>
+                </div>
+                <input
+                  type="text"
+                  value={editingCert.certificateImageUrl || ''}
+                  onChange={(e) => setEditingCert({ ...editingCert, certificateImageUrl: e.target.value })}
+                  className={inputCls}
+                  placeholder="https://... or click Upload File to CDN"
+                />
+                {certUploadError && (
+                  <p className="text-[10px] text-rose-400 font-mono mt-1">{certUploadError}</p>
+                )}
               </div>
 
               <div>
